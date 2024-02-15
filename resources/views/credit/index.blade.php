@@ -21,27 +21,29 @@
            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                <thead>
                    <tr>
-                       <th>Nombre</th>
-                       <th>Direccion</th>
-                       <th>Barrio</th>
-                       <th>Telefono</th>
-                       <th>Ciudad</th>
+                       <th>Fecha</th>
+                       <th>Cliente</th>
+                       <th>Valor</th>
+                       <th>Saldo</th>
+                       <th>Cuotas pendiente</th>
+                       <th>Estado</th>
                        <th>Aciones</th>
                    </tr>
                </thead>
                <tbody>
-                  @foreach ($customers as $customer)
+                  @foreach ($credits as $credit)
                   <tr>
-                     <td>{{ $customer->fullname }}</td>
-                     <td>{{$customer->identification}}</td>
-                     <td>{{ $customer->direction }}</td>
-                     <td>{{ $customer->phone }}</td>
-                     <td>{{ $customer->city }}</td>                     
+                     <td>{{ $credit->created_at }}</td>
+                     <td>{{ $credit->customer->fullname}}</td>
+                     <td>{{  $credit->amount }}</td>
+                     <td>{{  $credit->balance }}</td>
+                     <td>{{  $credit->quota_number_pendieng}}</td>
+                     <td><button class="btn btn-sm btn-success shadow-sm">Al dia</button></td>                             
                      <td>
-                        <a href="{{ route('cliente.show',$customer) }}" class="btn btn-info btn-sm">
+                        <a href="{{ route('cliente.show',$credit) }}" class="btn btn-info btn-sm">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="{{route('cliente.edit',$customer)}}" class="btn btn-warning btn-sm">
+                        <a href="{{route('cliente.edit',$credit)}}" class="btn btn-warning btn-sm">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
                         <a href="#" class="btn btn-danger btn-sm">

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->float('amount');
             $table->float('utility');
+            $table->float('balance');
             $table->integer('quota_number');
             $table->integer('quota_number_pendieng');
             $table->date('expiration_date');
