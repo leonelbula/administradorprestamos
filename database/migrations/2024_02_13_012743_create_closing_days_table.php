@@ -16,7 +16,7 @@ return new class extends Migration
             $table->float('amount');
             $table->date('date');
             $table->text('details');
-            $table->float('amount_difference');
+            $table->float('amount_difference',10,2);
             $table->timestamps();
         });
     }

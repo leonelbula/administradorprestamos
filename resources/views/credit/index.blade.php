@@ -9,18 +9,22 @@
 @section('content')
 <div class="card shadow mb-4">
    <div class="card-header py-3">
-       <a href="{{ route('cliente.create')}}" class="btn btn-success btn-sm btn-icon-split">      
+       <a href="{{ route('credit.create')}}" class="btn btn-success btn-sm btn-icon-split">      
         <span class="text">Nuevo</span>
     </a>
     <a href="#" class="btn btn-danger btn-sm btn-icon-split">
-     <span class="text">En Mora</span>
+     <span class="text">Vencidos</span>
   </a>
+  <a href="#" class="btn btn-primary btn-sm btn-icon-split">
+    <span class="text">Asignar Cobrador</span>
+ </a>
    </div>
    <div class="card-body">
        <div class="table-responsive">
            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                <thead>
                    <tr>
+                       <th>Codigo</th>
                        <th>Fecha</th>
                        <th>Cliente</th>
                        <th>Valor</th>
@@ -33,22 +37,33 @@
                <tbody>
                   @foreach ($credits as $credit)
                   <tr>
-                     <td>{{ $credit->created_at }}</td>
+                     <td>{{ $credit->id }}</td>
+                     <td>{{ $credit->date }}</td>
                      <td>{{ $credit->customer->fullname}}</td>
-                     <td>{{  $credit->amount }}</td>
-                     <td>{{  $credit->balance }}</td>
+                     <td>{{  number_format($credit->amount,0,'','.') }}</td>
+                     <td>{{  number_format($credit->balance,0,'','.') }}</td>
                      <td>{{  $credit->quota_number_pendieng}}</td>
-                     <td><button class="btn btn-sm btn-success shadow-sm">Al dia</button></td>                             
+                     <td>
+                        @if ( strtotime(date('Y-m-d', time())) > strtotime($credit->expiration_date))
+                        <button class="btn btn-sm btn-danger shadow-sm">vencido</button></td>                            
+                            
+                        @else
+                        <button class="btn btn-sm btn-success shadow-sm">Al dia</button></td>                            
+                            
+                        @endif
                      <td>
                         <a href="{{ route('cliente.show',$credit) }}" class="btn btn-info btn-sm">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="{{route('cliente.edit',$credit)}}" class="btn btn-warning btn-sm">
+                        <a href="{{route('credit.edit',$credit)}}" class="btn btn-warning btn-sm">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a href="#" class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                       
+                        <form action="{{route('credit.delete', $credit)}}" method="post" style="display: inline">
+                            @method('delete')
+                            @csrf
+                            <button type="submit" class="btn btn-danger btn-sm" ><i class="fas fa-trash"></i></button>
+                        </form>
                      </td>
                  </tr>               
                       

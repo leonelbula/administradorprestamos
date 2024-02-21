@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('credits', function (Blueprint $table) {
             $table->id();
-            $table->float('amount');
-            $table->float('utility');
-            $table->float('balance');
+            $table->float('amount',10,2);
+            $table->float('utility',10,2);
+            $table->float('balance',10,2);
             $table->integer('quota_number');
             $table->integer('quota_number_pendieng');
+            $table->integer('interest');
+            $table->date('date');
             $table->date('expiration_date');
             $table->integer('status');
             $table->foreignId('customer_id')->constrained('customers')->onUpdate('cascade')->onDelete('cascade');

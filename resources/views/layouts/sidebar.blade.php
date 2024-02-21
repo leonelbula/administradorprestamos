@@ -42,7 +42,7 @@
            <span>Prestamos</span></a>
    </li>
    <li class="nav-item">
-    <a class="nav-link" href="tables.html">
+    <a class="nav-link" href="{{ route('loanpayment.index')}}">
         <i class="fas fa-fw fa-table"></i>
         <span>Cobros</span></a>
 </li>
@@ -74,7 +74,7 @@
         data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Detalles:</h6>
-            <a class="collapse-item" href="utilities-color.html">Lista usuarios</a>
+            <a class="collapse-item" href="{{route('user.listar')}}">Lista Empleados</a>
             <a class="collapse-item" href="utilities-border.html">Reportes</a>
         </div>
     </div>
@@ -91,6 +91,7 @@
             <a class="collapse-item" href="buttons.html">Buttons</a>
             <a class="collapse-item" href="cards.html">Cards</a>
         </div>
+
     </div>
 </li>
 

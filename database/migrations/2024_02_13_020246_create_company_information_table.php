@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('company_information', function (Blueprint $table) {
             $table->id();
             $table->string('fullname');
-            $table->string('identification',45);
+            $table->string('identification', 45);
             $table->string('direction');
-            $table->string('town',45);
-            $table->string('department',45);
-            $table->string('phone',20);
-            $table->string('email',45);
+            $table->string('town', 45);
+            $table->string('department', 45);
+            $table->string('phone', 20);
+            $table->string('email', 45);
             $table->timestamps();
         });
     }

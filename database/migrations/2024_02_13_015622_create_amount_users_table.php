@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('amount_users', function (Blueprint $table) {
             $table->id();
-            $table->float('amount');
+            $table->float('amount',10,2);
             $table->date('date');
             $table->text('details');
             $table->float('amount_difference');

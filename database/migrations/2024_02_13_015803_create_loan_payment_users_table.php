@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('loan_payment_users', function (Blueprint $table) {
             $table->id();
-            $table->float('amount');
+            $table->float('amount',10,2);
             $table->date('date');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
