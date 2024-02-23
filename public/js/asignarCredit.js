@@ -1,12 +1,12 @@
-const url = document.getElementById("customerget").value;
-const $fullname = document.getElementById("fullname");
-const $customer_id = document.getElementById("id");
-
+const urluser = document.getElementById("userget").value;
+const $user = document.getElementById("user");
+const $user_id = document.getElementById("userid");
+console.log(urluser);
 document.addEventListener("click", (e) => {
-    if (e.target.matches(".agregarCliente")) {
+    if (e.target.matches(".agregarCobrador")) {
         let id = e.target.getAttribute("data-id");
         let data = { id: id };
-        fetch(url, {
+        fetch(urluser, {
             method: "POST",
             mode: "cors",
             cache: "no-cache",
@@ -25,9 +25,9 @@ document.addEventListener("click", (e) => {
                 return res.json();
             })
             .then((json) => {
-                $fullname.value = json[0].fullname;
-                $customer_id.value = json[0].id;
-                $("#customerModal").modal("hide");
+                $user.value = json[0].name;
+                $user_id.value = json[0].id;
+                $("#cobradorModal").modal("hide");
                 //activateBtn();
             })
             .catch((err) => {

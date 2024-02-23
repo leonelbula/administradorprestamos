@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssignPayment;
 use App\Models\Credits;
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CreditsController extends Controller
@@ -50,7 +52,7 @@ class CreditsController extends Controller
 
         $credit->save();
 
-        return redirect()->route('credit.listar');
+        return redirect()->route('credit.index');
     }
     public function edit(Credits $credit)
     {
@@ -90,11 +92,27 @@ class CreditsController extends Controller
 
         $credit->save();
 
-        return redirect()->route('credit.listar');
+        return redirect()->route('credit.index');
     }
     public function delete(Credits $credit)
     {
         $credit->delete();
-        return redirect()->route('credit.listar');
+        return redirect()->route('credit.index');
+    }
+    public function assigncredit()
+    {
+        $customers = Customer::all();
+        $users = User::all(); //where('type', 'cobrador');
+        $title = "Asignar Cobrador";
+        return view('credit.asignarcredit', compact('title', 'customers', 'users'));
+    }
+    public function savecobrador(Request $request)
+    {
+        $asignPay = new AssignPayment();
+        $asignPay->user_id = $request->userid;
+        $asignPay->customers_id = $request->id;
+        $asignPay->state = 1;
+        $asignPay->save();
+        return redirect()->route('credit.index');
     }
 }

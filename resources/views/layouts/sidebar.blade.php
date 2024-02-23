@@ -29,7 +29,7 @@
 
    <!-- Nav Item - Pages Collapse Menu -->
    <li class="nav-item">
-       <a class="nav-link collapsed" href="{{route('cliente.listar')}}">
+       <a class="nav-link collapsed" href="{{route('cliente.index')}}">
            <i class="fas fa-fw fa-folder"></i>
            <span>Clientes</span>
        </a>       
@@ -37,7 +37,7 @@
 
    <!-- Nav Item - Charts -->
    <li class="nav-item">
-       <a class="nav-link" href="{{route('credit.listar')}}">
+       <a class="nav-link" href="{{route('credit.index')}}">
            <i class="fas fa-fw fa-chart-area"></i>
            <span>Prestamos</span></a>
    </li>
@@ -47,7 +47,7 @@
         <span>Cobros</span></a>
 </li>
    <li class="nav-item">
-    <a class="nav-link" href="charts.html">
+    <a class="nav-link" href="{{route('amounuser.index')}}">
         <i class="fas fa-fw fa-chart-area"></i>
         <span>Cierres</span></a>
 </li>
@@ -74,7 +74,7 @@
         data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Detalles:</h6>
-            <a class="collapse-item" href="{{route('user.listar')}}">Lista Empleados</a>
+            <a class="collapse-item" href="{{route('user.index')}}">Lista Empleados</a>
             <a class="collapse-item" href="utilities-border.html">Reportes</a>
         </div>
     </div>

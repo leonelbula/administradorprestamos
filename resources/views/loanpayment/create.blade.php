@@ -6,52 +6,50 @@
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <a href="{{ route('cliente.index')}}" class="btn btn-success btn-sm btn-icon-split">      
+        <a href="{{ route('loanpayment.index')}}" class="btn btn-success btn-sm btn-icon-split">      
             <span class="text">Cancelar</span>
         </a>
         <a href="#" class="btn btn-success btn-sm btn-icon-split" data-toggle="modal" data-target="#customerModal">      
          <span class="text">Agregar Cliente</span>
      </a>
-     <a href="#" class="btn btn-success btn-sm btn-icon-split">      
-      <span class="text">Limpiar</span>
-  </a>
     </div>
     <div class="card-body">
         <div class="col-lg-7">
             <div class="p-2">
-                <form class="user" method="POST" action="{{route('credit.save')}}">
+                <form class="user" method="POST" action="{{route('loanpayment.save')}}">
                     @csrf
                     <div class="form-group">
                         <input type="text" class="form-control " name="fullname" id="fullname" value="{{old('fullname')}}" placeholder="Nombre Cliente" disabled>
                         <input type="hidden" name="id" id="id" value="">
+                        <input type="hidden" name="creditid" id="creditid" value="">
+                       
+
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-6 mb-3 mb-sm-0">
-                            <input type="number" class="form-control " name="amount" id="amount" value="{{old('amount')}}" placeholder="Valor Prestamo">
+                            <input type="number" class="form-control " name="" id="valpay" value="" placeholder="Valor de cuota" disabled>
                         </div>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control " name="total" id="total" value="{{old('total')}}" placeholder="Valor a Pagar">
-                        </div>
-                    </div>                   
+                           <input type="number" class="form-control " name="" id="numcouta" value=""  placeholder="Cuotas pendiente" disabled>
+                       </div>
+                    </div>  
                     <div class="form-group row">
-                        <div class="col-sm-4 mb-3 mb-sm-0">
-                            <input type="number" class="form-control " name="interest" id="interest" value="{{old('interest')}}" placeholder="Interes">
-                        </div>
-                        <div class="col-sm-4 mb-3 mb-sm-0">
-                            <input type="number" class="form-control " name="quota_number" id="quota_number" value="{{old('quota_number')}}" placeholder="Numero dias">
-                        </div>
-                        <div class="col-sm-4">
-                            <input type="date" class="form-control " name="date" id="date" value="{{ date('Y-m-d') }}"  placeholder="">
-                        </div>
+                     <div class="col-sm-6 mb-3 mb-sm-0">
+                         <input type="number" class="form-control " name="amount" id="amount" value="{{old('amount')}}" placeholder="Valor cuota">
+                     </div>
+                     <div class="col-sm-6">
+                        <input type="date" class="form-control " name="date" id="date" value="{{ date('Y-m-d') }}"  placeholder="">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" id="btnSave">Crear Prestamo</button>             
+                 </div>                       
+                    
+                    <button type="submit" class="btn btn-primary btn-block" id="Save">Guardar</button>             
                     
                 </form>               
             </div>
         </div>
     </div>
 </div>
-<input type="hidden" id="customerget" value="{{ route('ajaxcustomer.get') }}">
+<input type="hidden" id="customercredit" value="{{ route('ajaxcustomer.datocredit') }}">
 @endsection
 
 <div class="modal fade tableCustomer" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -96,6 +94,6 @@
         </div>
  </div>
 @section('script')
-<script src="{{ asset('js/customer.js')}}"></script>
-<script src="{{ asset('js/credit.js')}}"></script>
+<script src=""></script>
+<script src="{{ asset('js/customeloanpay.js')}}"></script>
 @endsection

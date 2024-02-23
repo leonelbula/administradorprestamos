@@ -15,7 +15,7 @@
     <a href="#" class="btn btn-danger btn-sm btn-icon-split">
      <span class="text">Vencidos</span>
   </a>
-  <a href="#" class="btn btn-primary btn-sm btn-icon-split">
+  <a href="{{route('credit.asignar')}}" class="btn btn-primary btn-sm btn-icon-split">
     <span class="text">Asignar Cobrador</span>
  </a>
    </div>
@@ -74,4 +74,6 @@
        </div>
    </div>
 </div>
+
+
 @endsection

@@ -6,7 +6,7 @@
 @section('content')
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <a href="{{ route('credit.listar')}}" class="btn btn-success btn-sm btn-icon-split">      
+        <a href="{{ route('credit.index')}}" class="btn btn-success btn-sm btn-icon-split">      
             <span class="text">Cancelar</span>
         </a>
         <a href="#" class="btn btn-success btn-sm btn-icon-split" data-toggle="modal" data-target="#customerModal">      

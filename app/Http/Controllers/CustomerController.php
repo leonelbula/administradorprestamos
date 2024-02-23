@@ -41,7 +41,7 @@ class CustomerController extends Controller
         $customer->email = $request->email;
 
         $customer->save();
-        return redirect()->route('cliente.listar');
+        return redirect()->route('cliente.index');
     }
     public function edit(Customer $customer)
     {
@@ -66,6 +66,6 @@ class CustomerController extends Controller
         $customer->email = $request->email;
 
         $customer->save();
-        return redirect()->route('cliente.listar');
+        return redirect()->route('cliente.index');
     }
 }

@@ -1,11 +1,15 @@
-const url = document.getElementById("customerget").value;
+const url = document.getElementById("customercredit").value;
 const $fullname = document.getElementById("fullname");
 const $customer_id = document.getElementById("id");
+const $valpay = document.getElementById("valpay");
+const $credit_id = document.getElementById("creditid");
+const $numcouta = document.getElementById("numcouta");
 
 document.addEventListener("click", (e) => {
     if (e.target.matches(".agregarCliente")) {
         let id = e.target.getAttribute("data-id");
         let data = { id: id };
+
         fetch(url, {
             method: "POST",
             mode: "cors",
@@ -27,11 +31,16 @@ document.addEventListener("click", (e) => {
             .then((json) => {
                 $fullname.value = json[0].fullname;
                 $customer_id.value = json[0].id;
+                $numcouta.value = json[0].quota_number_pendieng;
+                $credit_id.value = json[0].idcredit;
+                let total = Number(json[0].amount) + Number(json[0].utility);
+                let value = Number(total) / Number(json[0].quota_number);
+                $valpay.value = value;
                 $("#customerModal").modal("hide");
-                //activateBtn();
+                //console.log(json);
             })
             .catch((err) => {
-                alert(err);
+                console.log(err);
             });
     }
 });

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->text('details');
             $table->float('amount_difference');
+            $table->integer('state');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
