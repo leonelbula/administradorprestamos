@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class CreditsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $credits = Credits::all();
@@ -97,22 +101,6 @@ class CreditsController extends Controller
     public function delete(Credits $credit)
     {
         $credit->delete();
-        return redirect()->route('credit.index');
-    }
-    public function assigncredit()
-    {
-        $customers = Customer::all();
-        $users = User::all(); //where('type', 'cobrador');
-        $title = "Asignar Cobrador";
-        return view('credit.asignarcredit', compact('title', 'customers', 'users'));
-    }
-    public function savecobrador(Request $request)
-    {
-        $asignPay = new AssignPayment();
-        $asignPay->user_id = $request->userid;
-        $asignPay->customers_id = $request->id;
-        $asignPay->state = 1;
-        $asignPay->save();
         return redirect()->route('credit.index');
     }
 }

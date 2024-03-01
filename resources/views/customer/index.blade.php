@@ -10,11 +10,11 @@
 <div class="card shadow mb-4">
    <div class="card-header py-3">
        <a href="{{ route('cliente.create')}}" class="btn btn-success btn-sm btn-icon-split">      
-        <span class="text">Nuevo</span>
+        <span class="text">Nuevo cliente</span>
     </a>
-    <a href="#" class="btn btn-danger btn-sm btn-icon-split">
-     <span class="text">En Mora</span>
-  </a>
+    <a href="{{route('cliente.asignar')}}" class="btn btn-primary btn-sm btn-icon-split">
+        <span class="text">Asignar Cobrador</span>
+     </a>
    </div>
    <div class="card-body">
        <div class="table-responsive">

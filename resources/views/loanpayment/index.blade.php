@@ -3,8 +3,6 @@
     {{$title}}
 @endsection
 @section('buttom')
-<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 @endsection
 @section('content')
 <div class="card shadow mb-4">
@@ -30,7 +28,7 @@
       <div class="col-lg-6">
          <div class="card shadow mb-3">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Cobros Realizados Total = 10</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Cobros Realizados Total = {{ count($loanPay) }}</h6>
             </div>
             <div class="card-body">
                <div class="table-responsive">
@@ -39,15 +37,14 @@
                           <tr>
                               <th>#</th>
                               <th>Nombre cliente</th>                             
-                              <th>Fecha</th>
                               <th>Aciones</th>
                           </tr>
                       </thead>
-                      <tbody>                       
-                         <tr>
-                            <td></td>                     
-                            <td></td>
-                            <td></td>                                      
+                      <tbody> 
+                        @foreach ($customerspays as $pay)
+                        <tr>
+                            <td>{{$pay->id}}</td>                     
+                            <td>{{$pay->fullname}}</td>                                 
                             <td>
                                <a href="" class="btn btn-info btn-sm">
                                    <i class="fas fa-eye"></i>
@@ -56,7 +53,10 @@
                                    <i class="fas fa-pencil-alt"></i>
                                </a>                              
                             </td>
-                        </tr>              
+                        </tr>      
+                        
+                    @endforeach                      
+                                 
                          
                       </tbody>
                   </table>
@@ -67,7 +67,12 @@
       <div class="col-lg-6">
          <div class="card shadow mb-3">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-success">Cobros Pendiente  Total = 50</h6>
+                <h6 class="m-0 font-weight-bold text-success">Cobros Pendiente  Total = 
+                @php
+                $saldo =  $numPay - count($loanPay);    
+                @endphp
+                {{$saldo}}
+                </h6>
             </div>
             <div class="card-body">
                <div class="table-responsive">
@@ -79,8 +84,7 @@
                               <th>Aciones</th>
                           </tr>
                       </thead>
-                      <tbody>
-                       
+                      <tbody>                      
                          <tr>
                             <td></td>                     
                             <td></td>                                           
@@ -126,9 +130,7 @@
                  <div class="col-sm-4">
                   <button type="submit" class="btn btn-primary" id="btnInit">Iniciar Cobros</button>
               </div>
-              </div>
-              
-                           
+              </div>                      
 
              </form>
           </div>
@@ -150,13 +152,12 @@
                 </button>
             </div>
             <div class="modal-body">
-              <form class="user" method="POST" action="{{route('credit.save')}}">
+              <form class="user" method="POST" action="{{route('amountuser.saveclose')}}">
                  @csrf
                  <div class="form-group">
                      <input type="text" class="form-control " name="fullname" id="fullname" value="{{old('fullname')}}" placeholder="Nombre de cobrador" disabled>
-                     <input type="hidden" name="id" id="id" value="">
-                     <input type="hidden" name="credit_id" id="credit_id" value="">
-
+                     <input type="hidden" name="id" id="id" value="1">
+                    
                  </div>                    
                  <div class="form-group row">                     
                   <div class="col-sm-6">

@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\AmountUser;
+use App\Models\LoanPayment;
 use Illuminate\Http\Request;
 
 class AmountUserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $title = "Cierres Diarios";
-        return view('amountuser.index', compact('title'));
+        $amountsUser = AmountUser::where('date', date('y-m-d'))->get();
+        return view('amountuser.index', compact('title', 'amountsUser'));
     }
     public function start_pay(Request $request)
     {
@@ -36,5 +42,41 @@ class AmountUserController extends Controller
         $amountUser->save();
 
         return redirect()->route('loanpayment.index');
+    }
+    public function saveclose(Request $request)
+    {
+        //$dateClose = AmountUser::find($request->id);
+        $dateClose = AmountUser::where([['user_id', $request->id], ['state', 1]])->first();
+        $recaudo = LoanPayment::where('user_id', $request->id)->whereBetween('date', [$dateClose->date, $request->date])->sum('amount');
+        $dateClose->amount = $recaudo;
+        $dateClose->state = 0;
+        $dateClose->save();
+        return redirect()->route('loanpayment.index');
+    }
+
+    public function confirmcollection($user_id)
+    {
+        $title = "Efectivo entregado";
+        $amountsUser = AmountUser::where([['user_id', $user_id], ['date', date('y-m-d')]])->get();
+        return view('amountuser.confirmcollection', compact('title', 'amountsUser'));
+    }
+    public function saveconfirmcollection(Request $request, AmountUser $amountuser)
+    {
+        // $amountuser = AmountUser::find($id->id);
+        if ($request->details == "") {
+            $details = "N/N";
+        } else {
+            $details = $request->details;
+        }
+
+
+        $amount_difference = $request->deliveredvalue - $amountuser->amount;
+        $amountuser->details = $details;
+        $amountuser->amount_difference = $amount_difference;
+        $amountuser->state = 2;
+
+        $amountuser->save();
+
+        return redirect()->route('amounuser.index');
     }
 }

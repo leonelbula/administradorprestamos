@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AssignPayment;
 use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $customers = Customer::all();
@@ -66,6 +73,24 @@ class CustomerController extends Controller
         $customer->email = $request->email;
 
         $customer->save();
+        return redirect()->route('cliente.index');
+    }
+    public function assigncredit()
+    {
+        //$customers = Customer::all();
+        $customers = AssignPayment::join('customers', 'customers.id', '!=', 'assign_payments.customers_id')->select('customers.id', 'fullname', 'direction', DB::raw('count(assign_payments.customers_id) as assign_payments_count'))->groupBy('customers.id')->get();
+
+        $users = User::where('type', 'cobrador')->get(); //where('type', 'cobrador');
+        $title = "Asignar Cobrador";
+        return view('customer.asignarcredit', compact('title', 'customers', 'users'));
+    }
+    public function savecobrador(Request $request)
+    {
+        $asignPay = new AssignPayment();
+        $asignPay->user_id = $request->userid;
+        $asignPay->customers_id = $request->id;
+        $asignPay->state = 1;
+        $asignPay->save();
         return redirect()->route('cliente.index');
     }
 }
