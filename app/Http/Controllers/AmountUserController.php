@@ -86,4 +86,15 @@ class AmountUserController extends Controller
 
         return redirect()->route('amounuser.index');
     }
+    public function report()
+    {
+        $title = "Reportes de Cobros";
+        $listReporte = AmountUser::all()->where('state', 0);
+        return view('amountuser.report', compact('title', 'listReporte'));
+    }
+    public function reportdetail(AmountUser $amountuser)
+    {
+        $title = 'Detalles del Cobro';
+        return view('amountuser.reporteDetail', compact('title', 'amountuser'));
+    }
 }

@@ -41,6 +41,8 @@ Route::post('/cobro', [LoanPaymentController::class, 'save'])->name('loanpayment
 //route AmountUser
 Route::get('/listacierres', [AmountUserController::class, 'index'])->name('amounuser.index');
 Route::get('/entregarmonto/{user_id}', [AmountUserController::class, 'confirmcollection'])->name('amountuser.confirm');
+Route::get('/reportes', [AmountUserController::class, 'report'])->name('amountuser.report');
+Route::get('/reportes/{amountuser}/detalles', [AmountUserController::class, 'reportdetail'])->name('amountuser.reportdetail');
 Route::post('/inicarcobros', [AmountUserController::class, 'start_pay'])->name('amountuser.start_pay');
 Route::post('/cobrocerrar', [AmountUserController::class, 'saveclose'])->name('amountuser.saveclose');
 Route::put('/amountuser/{amountuser}', [AmountUserController::class, 'saveconfirmcollection'])->name('amountuser.saveconfirmcollection');

@@ -6,10 +6,7 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{ route('loanpayment.index') }}" class="btn btn-success btn-sm btn-icon-split">
-                <span class="text">cobros</span>
-            </a>
-            <a href="#" class="btn btn-success btn-sm btn-icon-split">
+            <a href="{{ route('amountuser.report') }}" class="btn btn-success btn-sm btn-icon-split">
                 <span class="text">Reportes</span>
             </a>
         </div>
@@ -32,7 +29,7 @@
 
                             </div>
                             @if ($amount->state == 2)
-                                <a href="{{ route('amountuser.confirm', $amount->user_id) }}"
+                                <a href="{{ route('amountuser.reportdetail', $amount) }}"
                                     class="btn btn-warning btn-sm btn-icon-split">
                                     <span class="text" id="btn-confirmcollection" data-userid="{{ $amount->user_id }}">Ver
                                         detalles</span>
