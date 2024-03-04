@@ -21,4 +21,8 @@ class Credits extends Model
     {
         return $this->hasMany(LoanPayment::class);
     }
+    public function assignpayment(): BelongsTo
+    {
+        return $this->belongsTo(AssignPayment::class);
+    }
 }

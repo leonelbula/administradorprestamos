@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('loan_payments', function (Blueprint $table) {
             $table->id();
-            $table->float('amount',10,2);
+            $table->float('amount', 10, 2);
             $table->date('date');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('customers_id')->constrained('customers')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('credits_id')->constrained('credits')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('customer_id')->constrained('customers')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('credit_id')->constrained('credits')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

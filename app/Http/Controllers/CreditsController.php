@@ -7,6 +7,7 @@ use App\Models\Credits;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CreditsController extends Controller
 {
@@ -16,7 +17,13 @@ class CreditsController extends Controller
     }
     public function index()
     {
-        $credits = Credits::all();
+        if (auth()->user()->type == 'admin') {
+            $credits = Credits::all();
+        } else {
+            $credits =  AssignPayment::join('credits', 'credits.customer_id', '=', 'assign_payments.customer_id')->where('user_id', auth()->user()->id)->get();
+        }
+
+
         $title = "lista de Prestamos";
         return view('credit.index', compact('title', 'credits'));
     }

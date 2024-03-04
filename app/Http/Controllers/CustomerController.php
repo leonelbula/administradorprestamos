@@ -16,7 +16,11 @@ class CustomerController extends Controller
     }
     public function index()
     {
-        $customers = Customer::all();
+        if (auth()->user()->type == 'admin') {
+            $customers = Customer::all();
+        } else {
+            $customers = AssignPayment::join('customers', 'customers.id', '=', 'assign_payments.customer_id')->where('user_id', auth()->user()->id)->get();
+        }
         $title = "Listado de clientes";
         return view('customer.index', compact('customers', 'title'));
     }
@@ -46,8 +50,15 @@ class CustomerController extends Controller
         $customer->city = $request->city;
         $customer->phone = $request->phone;
         $customer->email = $request->email;
-
         $customer->save();
+        if (auth()->user()->type != 'admin') {
+            $asignPay = new AssignPayment();
+            $asignPay->state = 1;
+            $asignPay->user_id = auth()->user()->id;
+            $asignPay->customer_id = $customer->id;
+            $asignPay->save();
+        }
+
         return redirect()->route('cliente.index');
     }
     public function edit(Customer $customer)
@@ -78,7 +89,7 @@ class CustomerController extends Controller
     public function assigncredit()
     {
         //$customers = Customer::all();
-        $customers = AssignPayment::join('customers', 'customers.id', '!=', 'assign_payments.customers_id')->select('customers.id', 'fullname', 'direction', DB::raw('count(assign_payments.customers_id) as assign_payments_count'))->groupBy('customers.id')->get();
+        $customers = AssignPayment::join('customers', 'customers.id', '!=', 'assign_payments.customer_id')->select('customers.id', 'fullname', 'direction', DB::raw('count(assign_payments.customer_id) as assign_payments_count'))->groupBy('customers.id')->get();
 
         $users = User::where('type', 'cobrador')->get(); //where('type', 'cobrador');
         $title = "Asignar Cobrador";

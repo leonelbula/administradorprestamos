@@ -26,20 +26,27 @@ class AmountUserController extends Controller
         } else {
             $date = $request->date;
         }
-        $amount = 0;
-        $details = "-";
-        $amount_difference = 0;
-        $user_id = 1;
+        $init = AmountUser::where('date', $request->date)->first();
+        if ($init) {
+            return back()->with('valid', 'valid');
+        } else {
+            $amount = 0;
+            $details = "-";
+            $amount_difference = 0;
+            $user_id = 1;
 
-        $amountUser = new AmountUser();
-        $amountUser->amount = $amount;
-        $amountUser->date = $request->date;
-        $amountUser->details = $details;
-        $amountUser->amount_difference = $amount_difference;
-        $amountUser->state = 1;
-        $amountUser->user_id = $user_id;
+            $amountUser = new AmountUser();
+            $amountUser->amount = $amount;
+            $amountUser->date = $request->date;
+            $amountUser->details = $details;
+            $amountUser->amount_difference = $amount_difference;
+            $amountUser->state = 1;
+            $amountUser->user_id = $user_id;
 
-        $amountUser->save();
+            $amountUser->save();
+        }
+
+
 
         return redirect()->route('loanpayment.index');
     }
