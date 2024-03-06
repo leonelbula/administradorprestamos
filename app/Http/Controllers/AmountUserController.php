@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AmountUser;
+use App\Models\ClosingDay;
 use App\Models\LoanPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AmountUserController extends Controller
 {
@@ -15,7 +17,7 @@ class AmountUserController extends Controller
     public function index()
     {
         $title = "Cierres Diarios";
-        $amountsUser = AmountUser::where('date', date('y-m-d'))->get();
+        $amountsUser = AmountUser::where('state', 0)->get();
         return view('amountuser.index', compact('title', 'amountsUser'));
     }
     public function start_pay(Request $request)
@@ -28,7 +30,8 @@ class AmountUserController extends Controller
         }
         $init = AmountUser::where('date', $request->date)->first();
         if ($init) {
-            return back()->with('valid', 'valid');
+            return redirect()->route('loanpayment.index')
+                ->with('fail', 'Existe cobros ya cerrados con esta fecha ' . $request->date);
         } else {
             $amount = 0;
             $details = "-";
@@ -44,11 +47,8 @@ class AmountUserController extends Controller
             $amountUser->user_id = $user_id;
 
             $amountUser->save();
+            return redirect()->route('loanpayment.index')->with('success', 'Cobros iniciados corectamente');
         }
-
-
-
-        return redirect()->route('loanpayment.index');
     }
     public function saveclose(Request $request)
     {
@@ -57,15 +57,15 @@ class AmountUserController extends Controller
         $recaudo = LoanPayment::where('user_id', $request->id)->whereBetween('date', [$dateClose->date, $request->date])->sum('amount');
         $dateClose->amount = $recaudo;
         $dateClose->state = 0;
-        $dateClose->save();
-        return redirect()->route('loanpayment.index');
+        $res = $dateClose->save();
+
+        return redirect()->route('loanpayment.index')->with('success', 'Cobros cerrados corectamente');
     }
 
-    public function confirmcollection($user_id)
+    public function confirmcollection(AmountUser $amountuser)
     {
         $title = "Efectivo entregado";
-        $amountsUser = AmountUser::where([['user_id', $user_id], ['date', date('y-m-d')]])->get();
-        return view('amountuser.confirmcollection', compact('title', 'amountsUser'));
+        return view('amountuser.confirmcollection', compact('title', 'amountuser'));
     }
     public function saveconfirmcollection(Request $request, AmountUser $amountuser)
     {
@@ -76,7 +76,6 @@ class AmountUserController extends Controller
             $details = $request->details;
         }
 
-
         $amount_difference = $request->deliveredvalue - $amountuser->amount;
         $amountuser->details = $details;
         $amountuser->amount_difference = $amount_difference;
@@ -84,17 +83,29 @@ class AmountUserController extends Controller
 
         $amountuser->save();
 
-        return redirect()->route('amounuser.index');
+        return redirect()->route('amounuser.index')->with('success', 'Informacion registrados corectamente');
     }
     public function report()
     {
         $title = "Reportes de Cobros";
-        $listReporte = AmountUser::all()->where('state', 0);
+        $listReporte = AmountUser::all()->where('state', 2);
         return view('amountuser.report', compact('title', 'listReporte'));
     }
     public function reportdetail(AmountUser $amountuser)
     {
         $title = 'Detalles del Cobro';
         return view('amountuser.reporteDetail', compact('title', 'amountuser'));
+    }
+    public function totalclose()
+    {
+        $title = 'Total del Cobro';
+        $totalValue = AmountUser::select(DB::raw('DATE(date)as date'), DB::raw('SUM(amount) AS total'), DB::raw('SUM(amount_difference) AS total_difference'))->groupBy(DB::raw('DATE(date)'))->where('state', 2)->get();
+        return view('amountuser.totalclose', compact('title', 'totalValue'));
+    }
+    public function showtotalclose(Request $request)
+    {
+        $title = "detalles";
+        $detail = AmountUser::where('date', $request->date)->get();
+        return view('amountuser.showtotalclose', compact('title', 'detail'));
     }
 }

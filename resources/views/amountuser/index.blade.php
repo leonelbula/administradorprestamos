@@ -17,7 +17,9 @@
                     <div class="col-lg-4 mb-4">
                         <div class="card-body">
                             {{ $amount->user->name }}
-                            <div class="text-black-50 p-2">Efectivo A Entregar <br>{{ number_format($amount->amount) }}
+                            <div class="text-black-50 p-2">
+                                {{ $amount->date }}
+                                <br>Efectivo A Entregar <br>{{ number_format($amount->amount) }}
                             </div>
                             <div class="text-black-50 p-2">Saldo sin entregar
                                 <br>
@@ -35,10 +37,10 @@
                                         detalles</span>
                                 </a>
                             @else
-                                <a href="{{ route('amountuser.confirm', $amount->user_id) }}"
+                                <a href="{{ route('amountuser.confirm', $amount) }}"
                                     class="btn btn-success btn-sm btn-icon-split">
                                     <span class="text" id="btn-confirmcollection"
-                                        data-userid="{{ $amount->user_id }}">Confirmar</span>
+                                        data-userid="{{ $amount }}">Confirmar</span>
                                 </a>
                             @endif
 
@@ -52,5 +54,24 @@
 @endsection
 
 @section('script')
+    @if (session('fail'))
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: '{{ session('fail') }}',
+                icon: 'error',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @elseif (session('success'))
+        <script>
+            Swal.fire({
+                title: 'Informacion guardada',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @endif
     <script src="{{ asset('js/amountUser.js') }}"></script>
 @endsection

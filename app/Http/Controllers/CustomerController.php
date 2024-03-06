@@ -59,7 +59,7 @@ class CustomerController extends Controller
             $asignPay->save();
         }
 
-        return redirect()->route('cliente.index');
+        return redirect()->route('cliente.index')->with('success', 'cliente registrados corectamente');
     }
     public function edit(Customer $customer)
     {
@@ -84,7 +84,7 @@ class CustomerController extends Controller
         $customer->email = $request->email;
 
         $customer->save();
-        return redirect()->route('cliente.index');
+        return redirect()->route('cliente.index')->with('success', 'cliente actulizado corectamente');
     }
     public function assigncredit()
     {
@@ -102,6 +102,6 @@ class CustomerController extends Controller
         $asignPay->customers_id = $request->id;
         $asignPay->state = 1;
         $asignPay->save();
-        return redirect()->route('cliente.index');
+        return redirect()->route('cliente.index')->with('success', 'cliente asignado corectamente');
     }
 }

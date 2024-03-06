@@ -52,7 +52,7 @@
                                         <spam class="text-danger">
                                             {{ number_format($amountuser->amount_difference, 0, '', '.') }}</spam>
                                     @else
-                                        <spam class="text-success">{{ number_format($amount->amount_difference,0, '', '.') }}</spam>
+                                        <spam class="text-success">{{ number_format($amountuser->amount_difference,0, '', '.') }}</spam>
                                     @endif
                                    
                                     <td>{{ $amountuser->date }}</td>

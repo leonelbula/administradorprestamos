@@ -12,7 +12,7 @@
             <a href="{{ route('amounuser.index') }}" class="btn btn-success btn-sm btn-icon-split">
                 <span class="text">Volver</span>
             </a>
-            <a href="{{ route('amountuser.totalclose') }}" class="btn btn-success btn-sm btn-icon-split">
+            <a href="{{ route('amounuser.index') }}" class="btn btn-success btn-sm btn-icon-split">
                 <span class="text">Total Ingresado</span>
             </a>
         </div>
@@ -21,25 +21,26 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Codigo</th>
+                            <th>#</th>
                             <th>Fecha</th>
-                            <th>Cobrador</th>
-                            <th>Valor</th>
-                            <th>Saldo</th>
+                            <th>Total</th>
+                            <th>Diferencia</th>
+
                             <th>Aciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($listReporte as $value)
+
+                        @foreach ($totalValue as $key => $value)
                             <tr>
-                                <td>{{ $value->id }}</td>
+                                <td>{{ $key }}</td>
                                 <td>{{ $value->date }}</td>
-                                <td>{{ $value->user->name }}</td>
-                                <td>{{ number_format($value->amount, 0, '', '.') }}</td>
-                                <td>{{ number_format($value->amount_difference, 0, '', '.') }}</td>
+                                <td>{{ number_format($value->total, 0, '', '.') }}</td>
+                                <td>{{ number_format($value->total_difference, 0, '', '.') }}</td>
 
                                 <td>
-                                    <a href="{{ route('amountuser.reportdetail', $value) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('amountuser.showtotalclose', $value->date) }}"
+                                        class="btn btn-info btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </td>

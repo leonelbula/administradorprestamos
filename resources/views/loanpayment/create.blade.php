@@ -104,6 +104,25 @@
     </div>
 </div>
 @section('script')
+    @if (session('fail'))
+        <script>
+            Swal.fire({
+                title: 'Error',
+                text: '{{ session('fail') }}',
+                icon: 'error',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @elseif (session('success'))
+        <script>
+            Swal.fire({
+                title: 'Informacion guardada',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @endif
     <script src=""></script>
     <script src="{{ asset('js/customeloanpay.js') }}"></script>
 @endsection

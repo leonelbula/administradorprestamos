@@ -63,7 +63,7 @@ class CreditsController extends Controller
 
         $credit->save();
 
-        return redirect()->route('credit.index');
+        return redirect()->route('credit.index')->with('success', 'Credito registrados corectamente');
     }
     public function edit(Credits $credit)
     {
@@ -103,11 +103,11 @@ class CreditsController extends Controller
 
         $credit->save();
 
-        return redirect()->route('credit.index');
+        return redirect()->route('credit.index')->with('success', 'Credito actulizado corectamente');
     }
     public function delete(Credits $credit)
     {
         $credit->delete();
-        return redirect()->route('credit.index');
+        return redirect()->route('credit.index')->with('success', 'Credito eliminado corectamente');
     }
 }

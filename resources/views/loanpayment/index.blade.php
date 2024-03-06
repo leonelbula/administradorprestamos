@@ -7,15 +7,15 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{ route('loanpayment.create') }}" class="btn btn-success btn-sm btn-icon-split">
-                <span class="text">Nuevo Registro</span>
-            </a>
 
             @if (!isset($state))
                 <a href="#" class="btn btn-success btn-sm btn-icon-split" data-toggle="modal" data-target="#initpayModal">
                     <span class="text">Iniciar Cobros</span>
                 </a>
             @else
+                <a href="{{ route('loanpayment.create') }}" class="btn btn-success btn-sm btn-icon-split">
+                    <span class="text">Nuevo Registro</span>
+                </a>
                 <a href="#" class="btn btn-primary btn-sm btn-icon-split" data-toggle="modal"
                     data-target="#loanpaycloseModal">
                     <span class="text">Liquidar Cobros</span>
@@ -182,17 +182,23 @@
 </div>
 
 @section('script')
-
-    @hasSection('valid')
-    <script>
-        Swal.fire({
-            title: 'Error!',
-            text: 'Existen cobros registrado con esta fecha',
-            icon: 'error',
-            confirmButtonText: 'Cerrar'
-        })
-    </script>
+    @if (session('fail'))
+        <script>
+            Swal.fire({
+                title: 'Cobros ya liquidados',
+                text: '{{ session('fail') }}',
+                icon: 'error',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @elseif (session('success'))
+        <script>
+            Swal.fire({
+                title: 'Informacion guardada',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
     @endif
-       
-   
 @endsection

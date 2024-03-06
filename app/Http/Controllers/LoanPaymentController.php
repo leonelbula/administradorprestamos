@@ -85,6 +85,7 @@ class LoanPaymentController extends Controller
 
             $loanpaymentnew->amount = $amount;
             $loanpaymentnew->save();
+            return redirect()->route('loanpayment.create')->with('success', 'Cobro registrados corectamente');
         } else {
             $loanPay = new  LoanPayment();
             $loanPay->amount = $request->amount;
@@ -93,10 +94,7 @@ class LoanPaymentController extends Controller
             $loanPay->customer_id = $request->id;
             $loanPay->credit_id = $request->creditid;
             $loanPay->save();
+            return redirect()->route('loanpayment.create')->with('success', 'Cobro registrados corectamente');
         }
-
-
-
-        return redirect()->route('loanpayment.create');
     }
 }
