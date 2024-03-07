@@ -122,7 +122,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('amountuser.start_pay') }}" method="post">
+                <form action="{{ route('amountuser.startPay') }}" method="post">
                     @csrf
                     <div class="form-group row">
                         <div class="col-sm-4">
@@ -155,7 +155,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form class="user" method="POST" action="{{ route('amountuser.saveclose') }}">
+                <form class="user" method="POST" action="{{ route('amountuser.saveClose') }}">
                     @csrf
                     <div class="form-group">
                         <input type="text" class="form-control " name="fullname" id="fullname"

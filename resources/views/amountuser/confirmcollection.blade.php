@@ -19,7 +19,7 @@
                 <div class="col-lg-6 mb-4">
                     <div class="card-body">
                         <form class="user" method="POST"
-                            action="{{ route('amountuser.saveconfirmcollection', $amountuser) }}">
+                            action="{{ route('amountuser.saveConfirmCollection', $amountuser) }}">
                             @csrf
                             @method('put')
                             <div class="form-group">

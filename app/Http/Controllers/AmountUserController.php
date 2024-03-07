@@ -20,7 +20,7 @@ class AmountUserController extends Controller
         $amountsUser = AmountUser::where('state', 0)->get();
         return view('amountuser.index', compact('title', 'amountsUser'));
     }
-    public function start_pay(Request $request)
+    public function startPay(Request $request)
     {
 
         if (!$request->date) {
@@ -50,7 +50,7 @@ class AmountUserController extends Controller
             return redirect()->route('loanpayment.index')->with('success', 'Cobros iniciados corectamente');
         }
     }
-    public function saveclose(Request $request)
+    public function saveClose(Request $request)
     {
         //$dateClose = AmountUser::find($request->id);
         $dateClose = AmountUser::where([['user_id', $request->id], ['state', 1]])->first();
@@ -67,7 +67,7 @@ class AmountUserController extends Controller
         $title = "Efectivo entregado";
         return view('amountuser.confirmcollection', compact('title', 'amountuser'));
     }
-    public function saveconfirmcollection(Request $request, AmountUser $amountuser)
+    public function saveConfirmCollection(Request $request, AmountUser $amountuser)
     {
         // $amountuser = AmountUser::find($id->id);
         if ($request->details == "") {

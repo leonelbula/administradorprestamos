@@ -46,11 +46,19 @@
             <i class="fas fa-fw fa-table"></i>
             <span>Cobros</span></a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('amounuser.index') }}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Cierres</span></a>
-    </li>
+    @if (auth()->user()->type == 'admin')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('amounuser.index') }}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Cierres</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('capitalbalance.initialBalance') }}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Saldo iniciales</span></a>
+        </li>
+    @endif
+
 
     <!-- Divider -->
     <hr class="sidebar-divider">

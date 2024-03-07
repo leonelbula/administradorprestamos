@@ -86,7 +86,7 @@ class CustomerController extends Controller
         $customer->save();
         return redirect()->route('cliente.index')->with('success', 'cliente actulizado corectamente');
     }
-    public function assigncredit()
+    public function assignCredit()
     {
         //$customers = Customer::all();
         $customers = AssignPayment::join('customers', 'customers.id', '!=', 'assign_payments.customer_id')->select('customers.id', 'fullname', 'direction', DB::raw('count(assign_payments.customer_id) as assign_payments_count'))->groupBy('customers.id')->get();
@@ -95,7 +95,7 @@ class CustomerController extends Controller
         $title = "Asignar Cobrador";
         return view('customer.asignarcredit', compact('title', 'customers', 'users'));
     }
-    public function savecobrador(Request $request)
+    public function saveCobrador(Request $request)
     {
         $asignPay = new AssignPayment();
         $asignPay->user_id = $request->userid;

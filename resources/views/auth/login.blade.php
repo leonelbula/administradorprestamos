@@ -44,9 +44,9 @@
                                     <form class="user" action="{{ route('login') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user" id="name"
-                                                name="email" aria-describedby="emailHelp"
-                                                placeholder="Email de usuario.">
+                                            <input type="text" class="form-control form-control-user" id="name"
+                                                name="name" aria-describedby="nameHelp"
+                                                placeholder="Nombre de usuario.">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user" id="password"
@@ -54,9 +54,8 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
+
+
                                             </div>
                                         </div>
                                         <button type="submit"
@@ -66,7 +65,7 @@
                                     </form>
 
                                     <div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
+
                                     </div>
                                 </div>
                             </div>
