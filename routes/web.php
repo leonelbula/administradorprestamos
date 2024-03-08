@@ -54,7 +54,10 @@ Route::put('/amountuser/{amountuser}', [AmountUserController::class, 'saveConfir
 //user
 Route::get('/empleados', [PersonalInformationController::class, 'index'])->name('user.index');
 Route::get('/empleado/crear', [PersonalInformationController::class, 'create'])->name('user.create');
-Route::post('/empleado', [PersonalInformationController::class, 'save'])->name('user.save');
+Route::get('/empleado/{user}/edit', [PersonalInformationController::class, 'edit'])->name('user.edit');
+Route::post('/empleado', [PersonalInformationController::class, 'store'])->name('user.save');
+Route::put('/empleado/{user}', [PersonalInformationController::class, 'update'])->name('user.update');
+Route::delete('/empleado/{user}', [PersonalInformationController::class, 'destroy'])->name('user.destroy');
 
 //capital
 Route::get('saldoinicial/', [CapitalBalanceController::class, 'initialBalance'])->name('capitalbalance.initialBalance');

@@ -12,7 +12,6 @@
             <a href="{{ route('user.create') }}" class="btn btn-success btn-sm btn-icon-split">
                 <span class="text">Nuevo</span>
             </a>
-            {{ Auth::user() }}
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -21,7 +20,6 @@
                         <tr>
                             <th>Nombre</th>
                             <th>email</th>
-
                             <th>Aciones</th>
                         </tr>
                     </thead>
@@ -32,15 +30,16 @@
                                 <td>{{ $empleado->email }}</td>
 
                                 <td>
-                                    <a href="{{ route('cliente.show', $empleado) }}" class="btn btn-info btn-sm">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('cliente.edit', $empleado) }}" class="btn btn-warning btn-sm">
+                                    <a href="{{ route('user.edit', $empleado) }}" class="btn btn-warning btn-sm">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-sm">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
+                                    <form action="{{ route('user.destroy', $empleado) }}" method="post"
+                                        style="display: inline">
+                                        @method('delete')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger btn-sm"><i
+                                                class="fas fa-trash"></i></button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
@@ -50,4 +49,24 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    @if (session('fail'))
+        <script>
+            Swal.fire({
+                title: 'Cobros ya liquidados',
+                text: '{{ session('fail') }}',
+                icon: 'error',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @elseif (session('success'))
+        <script>
+            Swal.fire({
+                title: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @endif
 @endsection

@@ -26,7 +26,7 @@ class PersonalInformationController extends Controller
         return view('auth.register', compact('title'));
     }
 
-    public function save(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -43,6 +43,34 @@ class PersonalInformationController extends Controller
 
         $user->save();
 
-        return redirect()->route('user.create');
+        return redirect()->route('user.create')->with('success', 'Usuario registrado corectamente');
+    }
+    public function edit(User $user)
+    {
+        $title = "Editar Usuario";
+        return view('auth.edit', compact('title', 'user'));
+    }
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users,email,except,id',
+            'type' => 'required|string|max:255',
+            'password' => 'required|string|max:255'
+        ]);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->type = $request->type;
+
+        $user->save();
+
+        return redirect()->route('user.index')->with('success', 'Usuario editado corectamente');
+    }
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->route('user.index')->with('success', 'Credito eliminado corectamente');
     }
 }
