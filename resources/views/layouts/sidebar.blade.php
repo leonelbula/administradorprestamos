@@ -48,8 +48,13 @@
     </li>
     @if (auth()->user()->type == 'admin')
         <li class="nav-item">
+            <a class="nav-link" href="{{ route('bill.index') }}">
+                <i class="fas fa-fw fa-wallet"></i>
+                <span>Gastos</span></a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('amounuser.index') }}">
-                <i class="fas fa-fw fa-chart-area"></i>
+                <i class="fas fa-fw fa-folder"></i>
                 <span>Cierres</span></a>
         </li>
         <li class="nav-item">

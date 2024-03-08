@@ -3,6 +3,7 @@
 use App\Http\Controllers\AjaxCustomer;
 use App\Http\Controllers\AjaxUser;
 use App\Http\Controllers\AmountUserController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\CapitalBalanceController;
 use App\Http\Controllers\CreditsController;
 use App\Http\Controllers\CustomerController;
@@ -58,6 +59,15 @@ Route::post('/empleado', [PersonalInformationController::class, 'save'])->name('
 //capital
 Route::get('saldoinicial/', [CapitalBalanceController::class, 'initialBalance'])->name('capitalbalance.initialBalance');
 Route::post('saldoinicial/', [CapitalBalanceController::class, 'saveInitialBalance'])->name('capitalbalance.saveInitialBalance');
+
+//gastos
+Route::get('/gastos', [BillController::class, 'index'])->name('bill.index');
+Route::get('/gastos/crear', [BillController::class, 'create'])->name('bill.create');
+Route::get('/gastos/{bill}/ver', [BillController::class, 'show'])->name('bill.show');
+Route::get('/gastos/{bill}/edit', [BillController::class, 'edit'])->name('bill.edit');
+Route::post('/gastos/crear', [BillController::class, 'store'])->name('bill.store');
+Route::put('/gastos/{bill}', [BillController::class, 'update'])->name('bill.update');
+Route::delete('/gastos/{bill}', [BillController::class, 'destroy'])->name('bill.destroy');
 
 //ajax
 Route::post('/customerid', [AjaxCustomer::class, 'get'])->name('ajaxcustomer.get');

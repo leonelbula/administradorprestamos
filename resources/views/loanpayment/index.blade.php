@@ -194,8 +194,7 @@
     @elseif (session('success'))
         <script>
             Swal.fire({
-                title: 'Informacion guardada',
-                text: '{{ session('success') }}',
+                title: '{{ session('success') }}',
                 icon: 'success',
                 confirmButtonText: 'Cerrar'
             })
