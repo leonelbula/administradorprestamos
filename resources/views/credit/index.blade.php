@@ -3,8 +3,6 @@
     {{ $title }}
 @endsection
 @section('buttom')
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 @endsection
 @section('content')
     <div class="card shadow mb-4">
@@ -12,7 +10,7 @@
             <a href="{{ route('credit.create') }}" class="btn btn-success btn-sm btn-icon-split">
                 <span class="text">Nuevo</span>
             </a>
-            <a href="#" class="btn btn-danger btn-sm btn-icon-split">
+            <a href="{{route('credit.report')}}" class="btn btn-danger btn-sm btn-icon-split">
                 <span class="text">Vencidos</span>
             </a>
         </div>
@@ -33,6 +31,9 @@
                     </thead>
                     <tbody>
                         @foreach ($credits as $credit)
+                        @if ($credit->balance > 0 && strtotime(date('Y-m-d', time())) > strtotime($credit->customer->credit[0]->expiration_date))
+                            
+                        @endif
                             <tr>
 
                                 <td>{{ $credit->id }}</td>
@@ -42,9 +43,11 @@
                                 <td>{{ number_format($credit->balance, 0, '', '.') }}</td>
                                 <td>{{ $credit->quota_number_pendieng }}</td>
                                 <td>
-                                    @if (strtotime(date('Y-m-d', time())) > strtotime($credit->customer->credit[0]->expiration_date))
+                                    @if ($credit->balance > 0 && strtotime(date('Y-m-d', time())) > strtotime($credit->customer->credit[0]->expiration_date))
                                         <button class="btn btn-sm btn-danger shadow-sm">vencido</button>
                                 </td>
+                            @elseif ($credit->balance == 0)
+                                <button class="btn btn-sm btn-info shadow-sm">Cancelado</button></td>
                             @else
                                 <button class="btn btn-sm btn-success shadow-sm">Al dia</button></td>
                         @endif

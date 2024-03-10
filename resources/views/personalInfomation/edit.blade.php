@@ -22,13 +22,6 @@
                             <input type="text" class="form-control " name="name" id="name"
                                 value="{{ $empledo->name) }}" placeholder="Nombre completo" required>
                         </div>
-                        <div class="form-group">
-                            @if ($errors->has('email'))
-                                <div class="alert alert-danger">{{ $errors->first('email') }}</div>
-                            @endif
-                            <input type="email" class="form-control " name="email" id="email"
-                                value="{{ $empleado->email }}" placeholder="Email" required>
-                        </div>
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 @if ($errors->has('type'))

@@ -28,19 +28,18 @@ class PersonalInformationController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users,email,except,id',
+            'name' => 'required|string|max:255|unique:users,name,except,id',
             'type' => 'required|string|max:255',
             'password' => 'required|string|max:255'
         ]);
 
+
         $user = new User();
         $user->name = $request->name;
-        $user->email = $request->email;
         $user->password = bcrypt($request->password);
         $user->type = $request->type;
-
         $user->save();
 
         return redirect()->route('user.create')->with('success', 'Usuario registrado corectamente');
@@ -52,20 +51,23 @@ class PersonalInformationController extends Controller
     }
     public function update(Request $request, User $user)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users,email,except,id',
-            'type' => 'required|string|max:255',
-            'password' => 'required|string|max:255'
-        ]);
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->type = $request->type;
-
-        $user->save();
-
+        if ($request->name == $user->name) {
+            $user->password = bcrypt($request->password);
+            $user->type = $request->type;
+            $user->save();
+        } elseif (empty($request->password) && $request->name == $user->name) {
+            $user->type = $request->type;
+            $user->save();
+        } elseif (empty($request->password)) {
+            $user->name = $request->name;
+            $user->type = $request->type;
+            $user->save();
+        } else {
+            $user->password = bcrypt($request->password);
+            $user->type = $request->type;
+            $user->name = $request->name;
+            $user->save();
+        }
         return redirect()->route('user.index')->with('success', 'Usuario editado corectamente');
     }
     public function destroy(User $user)

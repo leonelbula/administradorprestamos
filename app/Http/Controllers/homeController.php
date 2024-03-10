@@ -21,6 +21,9 @@ class homeController extends Controller
         if (auth()->user()->type == 'admin') {
             $customers = Customer::all();
             $credit = Credits::select(DB::raw('SUM(amount) AS total'))->where('status', 1)->get();
+        } else {
+            $customers = [];
+            $credit = [];
         }
         return view('home.home', compact('title', 'customers', 'credit'));
     }

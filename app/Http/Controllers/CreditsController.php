@@ -110,4 +110,18 @@ class CreditsController extends Controller
         $credit->delete();
         return redirect()->route('credit.index')->with('success', 'Credito eliminado corectamente');
     }
+    public function report()
+    {
+        $title = "Clientes creditos Vencidos";
+        if (auth()->user()->type == 'admin') {
+            $credist = Credits::all();
+        } else {
+            $credits =  AssignPayment::join('credits', 'credits.customer_id', '=', 'assign_payments.customer_id')->where('user_id', auth()->user()->id)->get();
+        }
+        return view('credit.report', compact('title', 'credits'));
+    }
+    public function pdfRreportCredit()
+    {
+        
+    }
 }

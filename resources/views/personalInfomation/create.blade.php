@@ -21,18 +21,11 @@
                             <input type="text" class="form-control " name="name" id="name"
                                 value="{{ old('name') }}" placeholder="Nombre completo">
                         </div>
-                        <div class="form-group">
-                            @if ($errors->has('email'))
-                                <div class="alert alert-danger">{{ $errors->first('name') }}</div>
-                            @endif
-                            <input type="email" class="form-control " name="email" id="email"
-                                value="{{ old('email') }}" placeholder="Email">
-                        </div>
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 @if ($errors->has('type'))
-                                <div class="alert alert-danger">{{ $errors->first('name') }}</div>
-                            @endif
+                                    <div class="alert alert-danger">{{ $errors->first('name') }}</div>
+                                @endif
                                 <select name="type" id="type" class="form-control ">
                                     <option value="cobrador">Cobrador</option>
                                     <option value="administrador">Administrador</option>
