@@ -7,12 +7,14 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{ route('credit.create') }}" class="btn btn-success btn-sm btn-icon-split">
-                <span class="text">Nuevo</span>
+            <a href="{{ route('credit.index') }}" class="btn btn-success btn-sm btn-icon-split">
+                <span class="text">Volver</span>
             </a>
-            <a href="#" class="btn btn-info btn-sm btn-icon-split">
+            @if (auth()->user()->type == 'admin')
+            <a href="{{ route('credit.pdfreportcreditdefeated') }}" class="btn btn-info btn-sm btn-icon-split" target="_blank">
                 <span class="text">Descargar Reporte</span>
             </a>
+            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">

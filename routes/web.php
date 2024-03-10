@@ -32,6 +32,8 @@ Route::get('/prestamos', [CreditsController::class, 'index'])->name('credit.inde
 Route::get('/prestamos/crear', [CreditsController::class, 'create'])->name('credit.create');
 Route::get('/prestamos/{credit}/edit', [CreditsController::class, 'edit'])->name('credit.edit');
 Route::get('/prestamos/reportes', [CreditsController::class, 'report'])->name('credit.report');
+Route::get('/prestamos/reportespdf', [CreditsController::class, 'pdfReportCredit'])->name('credit.pdfreportcredit');
+Route::get('/prestamos/reportesprestamosvencidos', [CreditsController::class, 'pdfReportCreditDefeated'])->name('credit.pdfreportcreditdefeated');
 Route::post('/prestamos', [CreditsController::class, 'save'])->name('credit.save');
 Route::put('/prestamos/{credit}', [CreditsController::class, 'update'])->name('credit.update');
 Route::delete('/prestamos/{credit}', [CreditsController::class, 'delete'])->name('credit.delete');

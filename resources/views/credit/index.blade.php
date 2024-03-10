@@ -3,6 +3,11 @@
     {{ $title }}
 @endsection
 @section('buttom')
+    @if (auth()->user()->type == 'admin')
+        <a href="{{ route('credit.pdfreportcredit') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+            target="_blank">
+            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    @endif
 @endsection
 @section('content')
     <div class="card shadow mb-4">
@@ -10,7 +15,7 @@
             <a href="{{ route('credit.create') }}" class="btn btn-success btn-sm btn-icon-split">
                 <span class="text">Nuevo</span>
             </a>
-            <a href="{{route('credit.report')}}" class="btn btn-danger btn-sm btn-icon-split">
+            <a href="{{ route('credit.report') }}" class="btn btn-danger btn-sm btn-icon-split">
                 <span class="text">Vencidos</span>
             </a>
         </div>
@@ -31,9 +36,8 @@
                     </thead>
                     <tbody>
                         @foreach ($credits as $credit)
-                        @if ($credit->balance > 0 && strtotime(date('Y-m-d', time())) > strtotime($credit->customer->credit[0]->expiration_date))
-                            
-                        @endif
+                            @if ($credit->balance > 0 && strtotime(date('Y-m-d', time())) > strtotime($credit->customer->credit[0]->expiration_date))
+                            @endif
                             <tr>
 
                                 <td>{{ $credit->id }}</td>

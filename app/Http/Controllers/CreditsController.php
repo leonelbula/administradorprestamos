@@ -6,7 +6,9 @@ use App\Models\AssignPayment;
 use App\Models\Credits;
 use App\Models\Customer;
 use App\Models\User;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class CreditsController extends Controller
@@ -120,8 +122,26 @@ class CreditsController extends Controller
         }
         return view('credit.report', compact('title', 'credits'));
     }
-    public function pdfRreportCredit()
+    public function pdfReportCredit()
     {
-        
+
+        $data = Credits::where('status', 1)->get();
+        $view = view('pdf.pdfreportcredit', compact('data'));
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream();
+        // return $pdf->download('invoice.pdf');
+    }
+    public function pdfReportCreditDefeated()
+    {
+
+        $data = Credits::where('status', 1)->get();
+        $view = view('pdf.pdfreportcreditdefeated', compact('data'));
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream();
+        // return $pdf->download('invoice.pdf');
     }
 }
