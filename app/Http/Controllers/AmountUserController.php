@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\AmountUser;
+use App\Models\AssignPayment;
 use App\Models\ClosingDay;
+use App\Models\Credits;
 use App\Models\LoanPayment;
+use App\Models\NewCreditdUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AmountUserController extends Controller
@@ -36,7 +40,7 @@ class AmountUserController extends Controller
             $amount = 0;
             $details = "-";
             $amount_difference = 0;
-            $user_id = 1;
+            $user_id = auth()->user()->id;
 
             $amountUser = new AmountUser();
             $amountUser->amount = $amount;
@@ -53,8 +57,11 @@ class AmountUserController extends Controller
     public function saveClose(Request $request)
     {
         //$dateClose = AmountUser::find($request->id);
-        $dateClose = AmountUser::where([['user_id', $request->id], ['state', 1]])->first();
-        $recaudo = LoanPayment::where('user_id', $request->id)->whereBetween('date', [$dateClose->date, $request->date])->sum('amount');
+        $dateClose = AmountUser::where([['user_id', auth()->user()->id], ['state', 1]])->first();
+
+        $recaudo = LoanPayment::where('user_id', auth()->user()->id)->whereBetween('date', [$dateClose->date, $request->date])->sum('amount');
+        $asigCreditUser = AssignPayment::where('user_id', $request->id)->get();
+
         $dateClose->amount = $recaudo;
         $dateClose->state = 0;
         $res = $dateClose->save();
@@ -65,7 +72,10 @@ class AmountUserController extends Controller
     public function confirmcollection(AmountUser $amountuser)
     {
         $title = "Efectivo entregado";
-        return view('amountuser.confirmcollection', compact('title', 'amountuser'));
+        $newCredit = NewCreditdUser::where('user_id', $amountuser->user_id)
+            ->whereBetween('date', [$amountuser->date, $amountuser->date])
+            ->sum('amount');
+        return view('amountuser.confirmcollection', compact('title', 'amountuser', 'newCredit'));
     }
     public function saveConfirmCollection(Request $request, AmountUser $amountuser)
     {
@@ -76,7 +86,11 @@ class AmountUserController extends Controller
             $details = $request->details;
         }
 
-        $amount_difference = $request->deliveredvalue - $amountuser->amount;
+        $newCreditValue = NewCreditdUser::where('user_id', $amountuser->user_id)
+            ->whereBetween('date', [$amountuser->date, $amountuser->date])
+            ->sum('amount');
+
+        $amount_difference = $request->deliveredvalue - ($amountuser->amount - $newCreditValue);
         $amountuser->details = $details;
         $amountuser->amount_difference = $amount_difference;
         $amountuser->state = 2;

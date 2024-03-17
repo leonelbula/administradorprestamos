@@ -86,6 +86,11 @@ class CustomerController extends Controller
         $customer->save();
         return redirect()->route('cliente.index')->with('success', 'cliente actulizado corectamente');
     }
+    public function delete(Customer $customer)
+    {
+        $customer->delete();
+        return redirect()->route('cliente.index')->with('success', 'Cliente eliminado corectamente');
+    }
     public function assignCredit()
     {
         //$customers = Customer::all();

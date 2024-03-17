@@ -26,6 +26,7 @@ Route::post('/cliente', [CustomerController::class, 'store'])->name('cliente.sav
 Route::put('/cliente/{customer}', [CustomerController::class, 'update'])->name('cliente.update');
 Route::get('/cliente/asignarcobrador', [CustomerController::class, 'assignCredit'])->name('cliente.asignar');
 Route::post('/asigarcobrador', [CustomerController::class, 'saveCobrador'])->name('cliente.saveCobrador');
+Route::delete('/cliente/{customer}', [CustomerController::class, 'delete'])->name('cliente.delete');
 
 //route credit
 Route::get('/prestamos', [CreditsController::class, 'index'])->name('credit.index');

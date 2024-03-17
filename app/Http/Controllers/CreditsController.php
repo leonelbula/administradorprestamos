@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AssignPayment;
 use App\Models\Credits;
 use App\Models\Customer;
+use App\Models\NewCreditdUser;
 use App\Models\User;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
@@ -46,6 +47,7 @@ class CreditsController extends Controller
             'date' => 'required',
         ]);
 
+
         $amount = str_replace('.', '', $request->amount);
 
         $utility = $request->total - $amount;
@@ -64,6 +66,16 @@ class CreditsController extends Controller
         $credit->customer_id = $request->id;
 
         $credit->save();
+
+
+        if (auth()->user()->type != 'admin') {
+            $newCredit = new NewCreditdUser();
+            $newCredit->date = $request->date;
+            $newCredit->amount = $amount;
+            $newCredit->user_id = auth()->user()->id;
+            $newCredit->customer_id = $request->id;
+            $newCredit->save();
+        }
 
         return redirect()->route('credit.index')->with('success', 'Credito registrados corectamente');
     }

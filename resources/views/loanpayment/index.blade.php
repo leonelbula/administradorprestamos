@@ -47,7 +47,7 @@
                                     @foreach ($customerspays as $pay)
                                         <tr>
                                             <td>{{ $i++ }}</td>
-                                            <td>{{ $pay->fullname }}</td>
+                                            <td>{{ $pay->customer->fullname }}</td>
                                             <td>
                                                 <a href="" class="btn btn-info btn-sm">
                                                     <i class="fas fa-eye"></i>
@@ -87,17 +87,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+
                                     @foreach ($customersPend as $customer)
                                         <tr>
-                                            <td>{{ $customer->fullname }}</td>
-                                            <td>{{ $customer->direction }}</td>
+                                            <td>{{ $customer->customer->fullname }}</td>
+                                            <td>{{ $customer->customer->direction }}</td>
                                             <td>
-                                                <a href="" class="btn btn-info btn-sm">
+                                                <a href="{{ route('cliente.show', $customer->customer->id) }}"
+                                                    class="btn btn-info btn-sm">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             </td>
                                         </tr>
                                     @endforeach
+
                                 </tbody>
                             </table>
                         </div>
