@@ -35,6 +35,16 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @isset($fail)
+                            <tr>
+                                <div class="card mb-4 py-3 border-bottom-danger">
+                                    <div class="card-body">
+                                        {{ $fail }}
+                                    </div>
+                                </div>
+
+                            </tr>
+                        @endisset
                         @foreach ($credits as $credit)
                             @if ($credit->balance > 0 && strtotime(date('Y-m-d', time())) > strtotime($credit->customer->credit[0]->expiration_date))
                             @endif
@@ -56,7 +66,7 @@
                                 <button class="btn btn-sm btn-success shadow-sm">Al dia</button></td>
                         @endif
                         <td>
-                            <a href="{{ route('cliente.show', $credit) }}" class="btn btn-info btn-sm">
+                            <a href="{{ route('cliente.show', $credit->customer->id) }}" class="btn btn-info btn-sm">
                                 <i class="fas fa-eye"></i>
                             </a>
                             @if (auth()->user()->type == 'admin')
@@ -99,6 +109,15 @@
                 title: 'Informacion guardada',
                 text: '{{ session('success') }}',
                 icon: 'success',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @elseif (session('info'))
+        <script>
+            Swal.fire({
+                title: 'Prestano no generado',
+                text: '{{ session('info') }}',
+                icon: 'info',
                 confirmButtonText: 'Cerrar'
             })
         </script>

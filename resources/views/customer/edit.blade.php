@@ -37,6 +37,23 @@
                             <input type="email" class="form-control " name="email" id="email" value="{{$customer->email}}"  placeholder="Email">
                         </div>
                     </div>
+                    @if (auth()->user()->type == 'admin')
+                            <div class="form-group">
+                                <label for="">Cobrador encargado</label>
+                                <select name="type" id="user_id" class="form-control " required>
+                                    <option>Cobrador Asignado</option>
+                                    @foreach ($cobrador as $vale)
+                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @else
+                            <div class="form-group">
+                                <label for="">Cobrador encargado</label>
+                                <input type="text" class="form-control " name="" id=""
+                                    value="{{ auth()->user()->name }}" disabled>
+                            </div>
+                        @endif
                     <button type="submit" class="btn btn-primary btn-block">Editar</button>             
                     
                 </form>               

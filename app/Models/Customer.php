@@ -22,8 +22,8 @@ class Customer extends Model
     {
         return $this->hasMany(LoanPayment::class);
     }
-    public function assignacion(): HasOne
+    public function user()
     {
-        return $this->hasOne(AssignPayment::class);
+        return $this->belongsTo(User::class);
     }
 }

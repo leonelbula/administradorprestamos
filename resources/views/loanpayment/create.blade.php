@@ -18,12 +18,17 @@
                 <div class="p-2">
                     <form class="user" method="POST" action="{{ route('loanpayment.save') }}">
                         @csrf
-                        <div class="form-group">
-                            <input type="text" class="form-control " name="fullname" id="fullname"
-                                value="{{ old('fullname') }}" placeholder="Nombre Cliente" disabled>
-                            <input type="hidden" name="id" id="id" value="">
-                            <input type="hidden" name="creditid" id="creditid" value="">
-
+                        <div class="form-group row">
+                            <div class="col-sm-8 mb-3 mb-sm-0">
+                                <input type="text" class="form-control " name="fullname" id="fullname"
+                                    value="{{ old('fullname') }}" placeholder="Nombre Cliente" disabled>
+                                <input type="hidden" name="id" id="id" value="">
+                                <input type="hidden" name="creditid" id="creditid" value="">
+                            </div>
+                            <div class="col-sm-4 mb-3 mb-sm-0">
+                                <input type="number" class="form-control " name="" id="saldo" value=""
+                                    placeholder="Saldo" disabled>
+                            </div>
 
                         </div>
                         <div class="form-group row">
@@ -84,12 +89,12 @@
                     <tbody>
                         @foreach ($customers as $customer)
                             <tr>
-                                <td>{{ $customer->id }}</td>
-                                <td>{{ $customer->fullname }}</td>
-                                <td>{{ $customer->direction }}</td>
+                                <td>{{ $customer->customer->id }}</td>
+                                <td>{{ $customer->customer->fullname }}</td>
+                                <td>{{ $customer->customer->direction }}</td>
                                 <td>
                                     <button class="btn btn-success agregarCliente recuperarBoton" type="button"
-                                        id="customer_id" data-id="{{ $customer->id }}">Agregar</button>
+                                        id="customer_id" data-id="{{ $customer->customer->id }}">Agregar</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -119,6 +124,15 @@
                 title: 'Informacion guardada',
                 text: '{{ session('success') }}',
                 icon: 'success',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @elseif (session('info'))
+        <script>
+            Swal.fire({
+                title: 'Couta no guardada',
+                text: '{{ session('info') }}',
+                icon: 'info',
                 confirmButtonText: 'Cerrar'
             })
         </script>

@@ -6,48 +6,58 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{ route('cliente.index') }}" class="btn btn-success btn-sm btn-icon-split">
+            <a href="{{ route('credit.index') }}" class="btn btn-success btn-sm btn-icon-split">
                 <span class="text">Cancelar</span>
             </a>
             <a href="#" class="btn btn-success btn-sm btn-icon-split" data-toggle="modal" data-target="#customerModal">
                 <span class="text">Agregar Cliente</span>
             </a>
-            <a href="#" class="btn btn-success btn-sm btn-icon-split">
-                <span class="text">Limpiar</span>
-            </a>
         </div>
         <div class="card-body">
             <div class="col-lg-7">
                 <div class="p-2">
+                    @isset($fail)
+                        <div class="card mb-4 py-3 border-bottom-danger">
+                            <div class="card-body">
+                                {{ $fail }}
+                            </div>
+                        </div>
+                    @endisset
                     <form class="user" method="POST" action="{{ route('credit.save') }}">
                         @csrf
-                        <div class="form-group">
-                            <input type="text" class="form-control " name="fullname" id="fullname"
-                                value="{{ old('fullname') }}" placeholder="Nombre Cliente" disabled>
-                            <input type="hidden" name="id" id="id" value="">
+                        <div class="form-group row">
+                            <div class="col-sm-8 mb-3 mb-sm-0">
+                                <input type="text" class="form-control " name="fullname" id="fullname"
+                                    value="{{ old('fullname') }}" placeholder="Nombre Cliente" disabled>
+                                <input type="hidden" name="id" id="id" value="">
+                            </div>
+                            <div class="col-sm-4 mb-3 mb-sm-0">
+                                <input type="date" class="form-control " name="date" id="date"
+                                    value="{{ date('Y-m-d') }}" placeholder="">
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="number" class="form-control " name="amount" id="amount"
-                                    value="{{ old('amount') }}" placeholder="Valor Prestamo">
+                                    value="{{ old('amount') }}" placeholder="Valor Prestamo" required>
                             </div>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control " name="total" id="total"
-                                    value="{{ old('total') }}" placeholder="Valor a Pagar">
+                                    value="{{ old('total') }}" placeholder="Valor a Pagar" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-4 mb-3 mb-sm-0">
                                 <input type="number" class="form-control " name="interest" id="interest"
-                                    value="{{ old('interest') }}" placeholder="Interes">
+                                    value="{{ old('interest') }}" placeholder="Interes" required>
                             </div>
                             <div class="col-sm-4 mb-3 mb-sm-0">
                                 <input type="number" class="form-control " name="quota_number" id="quota_number"
-                                    value="{{ old('quota_number') }}" placeholder="Numero dias">
+                                    value="{{ old('quota_number') }}" placeholder="Numero dias" required>
                             </div>
                             <div class="col-sm-4">
-                                <input type="date" class="form-control " name="date" id="date"
-                                    value="{{ date('Y-m-d') }}" placeholder="">
+                                <input type="number" class="form-control " name="quota" id="quota"
+                                    value="{{ old('quota') }}" placeholder="Cuota" disabled>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block" id="btnSave">Crear Prestamo</button>

@@ -27,13 +27,17 @@
                             <input type="hidden" name="id" id="id" value="">
                         </div>
                         <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
+                            <div class="col-sm-4 mb-3 mb-sm-0">
                                 <input type="number" class="form-control " name="amount" id="amount"
                                     value="{{ old('amount') }}" placeholder="Valor Prestamo">
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control " name="total" id="total"
                                     value="{{ old('total') }}" placeholder="Valor a pagar">
+                            </div>
+                            <div class="col-sm-4 mb-3 mb-sm-0">
+                                <input type="number" class="form-control " name="quota" id="quota"
+                                    value="{{ old('quota') }}" placeholder="Cuotas">
                             </div>
                         </div>
                         <div class="form-group row">

@@ -42,6 +42,8 @@ Route::delete('/prestamos/{credit}', [CreditsController::class, 'delete'])->name
 //route loanpayment
 Route::get('/cobros', [LoanPaymentController::class, 'index'])->name('loanpayment.index');
 Route::get('/cobros/nuevo', [LoanPaymentController::class, 'create'])->name('loanpayment.create');
+Route::get('cobros/pendientes', [LoanPaymentController::class, 'customerPemdieng'])->name('loanpayment.pendieg');
+Route::get('cobros/pendienteshistorial', [LoanPaymentController::class, 'customerPemdiengHistory'])->name('loanpayment.pendieghistory');
 Route::post('/cobro', [LoanPaymentController::class, 'save'])->name('loanpayment.save');
 
 //route AmountUser

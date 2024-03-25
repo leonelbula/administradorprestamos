@@ -13,6 +13,10 @@ class Credits extends Model
 
     protected $guarded = [];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
@@ -20,9 +24,5 @@ class Credits extends Model
     public function loanPayment(): HasMany
     {
         return $this->hasMany(LoanPayment::class);
-    }
-    public function assignpayment(): BelongsTo
-    {
-        return $this->belongsTo(AssignPayment::class);
     }
 }

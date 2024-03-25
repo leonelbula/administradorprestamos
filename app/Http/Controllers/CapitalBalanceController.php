@@ -30,6 +30,9 @@ class CapitalBalanceController extends Controller
             'date' => 'required',
         ]);
 
+        $customer = Customer::find($request->id);
+
+
         $amount = str_replace('.', '', $request->amount);
 
         $utility = $request->total - $amount;
@@ -39,6 +42,7 @@ class CapitalBalanceController extends Controller
         $credit->amount = $amount;
         $credit->utility = $utility;
         $credit->balance = $request->saldo;
+        $credit->quota = $request->quota;
         $credit->quota_number = $request->quota_number;
         $credit->quota_number_pendieng = $request->quota_number;
         $credit->interest = $request->interest;
@@ -46,6 +50,7 @@ class CapitalBalanceController extends Controller
         $credit->expiration_date = $date_expiration;
         $credit->status = 1;
         $credit->customer_id = $request->id;
+        $credit->user_id = $customer->user_id;
 
         $credit->save();
 

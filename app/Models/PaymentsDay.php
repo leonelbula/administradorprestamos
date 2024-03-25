@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AssignPayment extends Model
+class PaymentsDay extends Model
 {
     use HasFactory;
 

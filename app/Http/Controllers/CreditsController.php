@@ -8,9 +8,11 @@ use App\Models\Customer;
 use App\Models\NewCreditdUser;
 use App\Models\User;
 use Barryvdh\DomPDF\PDF;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Echo_;
 
 class CreditsController extends Controller
 {
@@ -20,64 +22,91 @@ class CreditsController extends Controller
     }
     public function index()
     {
-        if (auth()->user()->type == 'admin') {
-            $credits = Credits::all();
-        } else {
-            $credits =  AssignPayment::join('credits', 'credits.customer_id', '=', 'assign_payments.customer_id')->where('user_id', auth()->user()->id)->get();
-        }
-
-
         $title = "lista de Prestamos";
-        return view('credit.index', compact('title', 'credits'));
+        $credits = [];
+        try {
+            if (auth()->user()->type == 'admin') {
+                $credits = Credits::all();
+            } else {
+                $credits =  Credits::where('user_id', auth()->user()->id)->get();
+            }
+            return view('credit.index', compact('title', 'credits'));
+        } catch (Exception $e) {
+            $fail = "Error al cargar la informacion";
+            return view('credit.index', compact('title', 'credits', 'fail'));
+        }
     }
     public function create()
     {
-        $customers = Customer::all();
         $title = "Nuevo Prestamo";
-        return view('credit.create', compact('title', 'customers'));
+        $customers = [];
+        try {
+            $customers =  Customer::where('user_id', auth()->user()->id)->get();
+            return view('credit.create', compact('title', 'customers'));
+        } catch (Exception $e) {
+            $fail = "Error al cargar la informacion";
+            return view('credit.create', compact('title', 'customers', 'fail'));
+        }
     }
     public function save(Request $request)
     {
-        $request->validate([
-            'id' => 'required',
-            'amount' => 'required',
-            'total' => 'required',
-            'quota_number' => 'required',
-            'interest' => 'required',
-            'date' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'id' => 'required',
+                'amount' => 'required',
+                'total' => 'required',
+                'quota_number' => 'required',
+                'interest' => 'required',
+                'date' => 'required',
+            ]);
+            $credits = Credits::where([['customer_id', $request->id], ['status', 1]])->get();
+
+            if (!empty($credits[0])) {
+                return redirect()->route('credit.index')->with('info', 'El Cliente Tiene credidos pendientes');
+            }
+
+            if (auth()->user()->type == 'admin') {
+                $customer = Customer::where('customer_id', $request->id)->first();
+                $user_id = $customer[0]->user_id;
+            } else {
+                $user_id = auth()->user()->id;
+            }
+
+            $amount = str_replace('.', '', $request->amount);
+            $quota = $request->total / $request->quota_number;
+            $utility = $request->total - $amount;
+            $date_expiration = date('Y-m-d', strtotime('+' . $request->quota_number . 'day', strtotime($request->date)));
+
+            $credit = new Credits();
+            $credit->amount = $amount;
+            $credit->utility = $utility;
+            $credit->balance = $request->total;
+            $credit->quota = $quota;
+            $credit->quota_number = $request->quota_number;
+            $credit->quota_number_pendieng = $request->quota_number;
+            $credit->interest = $request->interest;
+            $credit->date = $request->date;
+            $credit->expiration_date = $date_expiration;
+            $credit->status = 1;
+            $credit->customer_id = $request->id;
+            $credit->user_id = $user_id;
+
+            $credit->save();
 
 
-        $amount = str_replace('.', '', $request->amount);
+            if (auth()->user()->type != 'admin') {
+                $newCredit = new NewCreditdUser();
+                $newCredit->date = $request->date;
+                $newCredit->amount = $amount;
+                $newCredit->user_id = auth()->user()->id;
+                $newCredit->customer_id = $request->id;
+                $newCredit->save();
+            }
 
-        $utility = $request->total - $amount;
-        $date_expiration = date('Y-m-d', strtotime('+' . $request->quota_number . 'day', strtotime($request->date)));
-
-        $credit = new Credits();
-        $credit->amount = $amount;
-        $credit->utility = $utility;
-        $credit->balance = $request->total;
-        $credit->quota_number = $request->quota_number;
-        $credit->quota_number_pendieng = $request->quota_number;
-        $credit->interest = $request->interest;
-        $credit->date = $request->date;
-        $credit->expiration_date = $date_expiration;
-        $credit->status = 1;
-        $credit->customer_id = $request->id;
-
-        $credit->save();
-
-
-        if (auth()->user()->type != 'admin') {
-            $newCredit = new NewCreditdUser();
-            $newCredit->date = $request->date;
-            $newCredit->amount = $amount;
-            $newCredit->user_id = auth()->user()->id;
-            $newCredit->customer_id = $request->id;
-            $newCredit->save();
+            return redirect()->route('credit.index')->with('success', 'Credito registrados corectamente');
+        } catch (Exception $e) {
+            return redirect()->route('credit.index')->with('fail', 'Credito No registrado');
         }
-
-        return redirect()->route('credit.index')->with('success', 'Credito registrados corectamente');
     }
     public function edit(Credits $credit)
     {
@@ -87,37 +116,42 @@ class CreditsController extends Controller
     }
     public function update(Request $request, Credits $credit)
     {
-        $request->validate([
-            'id' => 'required',
-            'amount' => 'required',
-            'total' => 'required',
-            'quota_number' => 'required',
-            'date' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'id' => 'required',
+                'amount' => 'required',
+                'total' => 'required',
+                'quota_number' => 'required',
+                'date' => 'required',
+            ]);
 
-        if ($request->total != $credit->total) {
-            $utility = $request->total - $request->amount;
-        } else {
-            $utility = $credit->utility;
+            if ($request->total != $credit->total) {
+                $utility = $request->total - $request->amount;
+            } else {
+                $utility = $credit->utility;
+            }
+
+            $quota = $request->total / $request->quota_number;
+            $date_expiration = date('Y-m-d', strtotime('+' . $request->quota_number . 'day', strtotime($request->date)));
+
+            $credit->amount = $request->amount;
+            $credit->utility = $utility;
+            $credit->balance = $request->total;
+            $credit->quota = $quota;
+            $credit->quota_number = $request->quota_number;
+            $credit->quota_number_pendieng = $request->quota_number;
+            $credit->date = $request->date;
+            $credit->expiration_date = $date_expiration;
+            $credit->status = 1;
+            $credit->customer_id = $request->id;
+
+
+            $credit->save();
+
+            return redirect()->route('credit.index')->with('success', 'Credito actulizado corectamente');
+        } catch (Exception $e) {
+            return redirect()->route('credit.index')->with('success', 'Error al actulizar');
         }
-
-
-        $date_expiration = date('Y-m-d', strtotime('+' . $request->quota_number . 'day', strtotime($request->date)));
-
-        $credit->amount = $request->amount;
-        $credit->utility = $utility;
-        $credit->balance = $request->total;
-        $credit->quota_number = $request->quota_number;
-        $credit->quota_number_pendieng = $request->quota_number;
-        $credit->date = $request->date;
-        $credit->expiration_date = $date_expiration;
-        $credit->status = 1;
-        $credit->customer_id = $request->id;
-
-
-        $credit->save();
-
-        return redirect()->route('credit.index')->with('success', 'Credito actulizado corectamente');
     }
     public function delete(Credits $credit)
     {
@@ -130,7 +164,7 @@ class CreditsController extends Controller
         if (auth()->user()->type == 'admin') {
             $credist = Credits::all();
         } else {
-            $credits =  AssignPayment::join('credits', 'credits.customer_id', '=', 'assign_payments.customer_id')->where('user_id', auth()->user()->id)->get();
+            $credits =  [];
         }
         return view('credit.report', compact('title', 'credits'));
     }

@@ -1,5 +1,6 @@
 const url = document.getElementById("customercredit").value;
 const $fullname = document.getElementById("fullname");
+const $balance = document.getElementById("saldo");
 const $customer_id = document.getElementById("id");
 const $valpay = document.getElementById("valpay");
 const $credit_id = document.getElementById("creditid");
@@ -30,6 +31,8 @@ document.addEventListener("click", (e) => {
             })
             .then((json) => {
                 $fullname.value = json[0].fullname;
+                $balance.value = json[0].balance;
+                console.log(json[0]);
                 $customer_id.value = json[0].id;
                 $numcouta.value = json[0].quota_number_pendieng;
                 $credit_id.value = json[0].idcredit;

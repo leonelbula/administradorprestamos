@@ -11,12 +11,9 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <a href="{{ route('cliente.create') }}" class="btn btn-success btn-sm btn-icon-split">
-                <span class="text">Nuevo cliente</span>
+            <a href="{{ route('loanpayment.pendieg') }}" class="btn btn-success btn-sm btn-icon-split">
+                <span class="text">volver</span>
             </a>
-
-
-
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -27,7 +24,7 @@
                             <th>Direccion</th>
                             <th>Barrio</th>
                             <th>Telefono</th>
-                            <th>Ciudad</th>
+                            <th>N° Atrazos</th>
                             <th>Aciones</th>
                         </tr>
                     </thead>
@@ -44,25 +41,16 @@
                         @endisset
                         @foreach ($customers as $customer)
                             <tr>
-                                <td>{{ $customer->fullname }}</td>
-                                <td>{{ $customer->identification }}</td>
-                                <td>{{ $customer->direction }}</td>
-                                <td>{{ $customer->phone }}</td>
-                                <td>{{ $customer->city }}</td>
+                                <td>{{ $customer->customer->fullname }}</td>
+                                <td>{{ $customer->customer->identification }}</td>
+                                <td>{{ $customer->customer->direction }}</td>
+                                <td>{{ $customer->customer->phone }}</td>
+                                <td>{{ $customer->total }}</td>
                                 <td>
-                                    <a href="{{ route('cliente.show', $customer) }}" class="btn btn-info btn-sm">
+                                    <a href="{{ route('cliente.show', $customer->customer->id) }}"
+                                        class="btn btn-info btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('cliente.edit', $customer) }}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </a>
-                                    <form action="{{ route('cliente.delete', $customer) }}" method="post"
-                                        style="display: inline">
-                                        @method('delete')
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger btn-sm"><i
-                                                class="fas fa-trash"></i></button>
-                                    </form>
                                 </td>
                             </tr>
                         @endforeach

@@ -43,12 +43,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function assingPayment()
+    public function customer()
     {
-        return $this->hasMany(AssignPayment::class);
+        return $this->hasMany(Customer::class);
+    }
+    public function credit()
+    {
+        return $this->hasMany(Credits::class);
     }
     public  function loanPayment()
     {
         return $this->hasMany(LoanPayment::class);
+    }
+    public function paymentday()
+    {
+        return $this->hasMany(PaymentsDay::class);
     }
 }

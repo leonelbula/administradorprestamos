@@ -7,28 +7,30 @@
 @section('content')
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-
-            @if (!isset($state))
-                <a href="#" class="btn btn-success btn-sm btn-icon-split" data-toggle="modal" data-target="#initpayModal">
-                    <span class="text">Iniciar Cobros</span>
-                </a>
-            @else
-                <a href="{{ route('loanpayment.create') }}" class="btn btn-success btn-sm btn-icon-split">
-                    <span class="text">Nuevo Registro</span>
-                </a>
-                <a href="#" class="btn btn-primary btn-sm btn-icon-split" data-toggle="modal"
-                    data-target="#loanpaycloseModal">
-                    <span class="text">Liquidar Cobros</span>
-                </a>
+            @if (auth()->user()->type == 'cobrador')
+                @if (!isset($state))
+                    <a href="#" class="btn btn-success btn-sm btn-icon-split" data-toggle="modal"
+                        data-target="#initpayModal">
+                        <span class="text">Iniciar Cobros</span>
+                    </a>
+                @else
+                    <a href="{{ route('loanpayment.create') }}" class="btn btn-success btn-sm btn-icon-split">
+                        <span class="text">Nuevo Registro</span>
+                    </a>
+                    <a href="#" class="btn btn-primary btn-sm btn-icon-split" data-toggle="modal"
+                        data-target="#loanpaycloseModal">
+                        <span class="text">Liquidar Cobros</span>
+                    </a>
+                @endif
             @endif
-
 
         </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="card shadow mb-3">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Cobros Realizados Total = {{ count($loanPay) }}</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Cobros Realizados Total = {{ count($customerspays) }}
+                        </h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -37,10 +39,19 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nombre cliente</th>
-                                        <th>Aciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @isset($fail)
+                                        <tr>
+                                            <div class="card mb-4 py-3 border-bottom-danger">
+                                                <div class="card-body">
+                                                    {{ $fail }}
+                                                </div>
+                                            </div>
+
+                                        </tr>
+                                    @endisset
                                     @php
                                         $i = 0;
                                     @endphp
@@ -48,14 +59,6 @@
                                         <tr>
                                             <td>{{ $i++ }}</td>
                                             <td>{{ $pay->customer->fullname }}</td>
-                                            <td>
-                                                <a href="" class="btn btn-info btn-sm">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="" class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-pencil-alt"></i>
-                                                </a>
-                                            </td>
                                         </tr>
                                     @endforeach
 
@@ -71,7 +74,7 @@
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-success">Cobros Pendiente Total =
                             @php
-                                $saldo = $numPay - count($loanPay);
+                                $saldo = count($pendingpayment);
                             @endphp
                             {{ $saldo }}
                         </h6>
@@ -87,8 +90,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @isset($fail)
+                                        <tr>
+                                            <div class="card mb-4 py-3 border-bottom-danger">
+                                                <div class="card-body">
+                                                    {{ $fail }}
+                                                </div>
+                                            </div>
 
-                                    @foreach ($customersPend as $customer)
+                                        </tr>
+                                    @endisset
+
+                                    @foreach ($pendingpayment as $customer)
                                         <tr>
                                             <td>{{ $customer->customer->fullname }}</td>
                                             <td>{{ $customer->customer->direction }}</td>
@@ -199,6 +212,15 @@
             Swal.fire({
                 title: '{{ session('success') }}',
                 icon: 'success',
+                confirmButtonText: 'Cerrar'
+            })
+        </script>
+    @elseif (session('info'))
+        <script>
+            Swal.fire({
+                title: 'Couta no guardada',
+                text: '{{ session('info') }}',
+                icon: 'info',
                 confirmButtonText: 'Cerrar'
             })
         </script>

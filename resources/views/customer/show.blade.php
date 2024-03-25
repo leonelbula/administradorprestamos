@@ -28,7 +28,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">Cobrador Asignado</h6>
                     </div>
                     <ul>
-                        <li>{{ $customer->assignacion->user->name }}</li>
+                        <li>{{ $customer->user->name }}</li>
                     </ul>
                     <hr>
                     <div class="card-header py-3">
