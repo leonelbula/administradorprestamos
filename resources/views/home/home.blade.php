@@ -10,6 +10,16 @@
         <div class="p-2">
             @if (auth()->user()->type == 'admin')
                 <div class="row">
+                    @isset($fail)
+                        <tr>
+                            <div class="card mb-4 py-3 border-bottom-danger">
+                                <div class="card-body">
+                                    {{ $fail }}
+                                </div>
+                            </div>
+
+                        </tr>
+                    @endisset
 
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -100,7 +110,16 @@
                 </div>
             @else
                 <div class="row">
+                    @isset($fail)
+                        <tr>
+                            <div class="card mb-4 py-3 border-bottom-danger">
+                                <div class="card-body">
+                                    {{ $fail }}
+                                </div>
+                            </div>
 
+                        </tr>
+                    @endisset
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
@@ -113,6 +132,24 @@
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            Total prestamos</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{ count($credit) }}
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
