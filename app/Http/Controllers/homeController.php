@@ -39,7 +39,13 @@ class homeController extends Controller
             } else {
                 $user_id = auth()->user()->id;
                 $amountUser = AmountUser::where([['user_id', auth()->user()->id], ['state', 1]])->first();
-                $fecha = $amountUser->date;
+
+                if ($amountUser) {
+                    echo  $fecha = $amountUser->date;
+                } else {
+                    $fecha = Date('Y-m-d');
+                }
+
                 $customers = PaymentsDay::where('user_id', auth()->user()->id)->get();
                 $credit = Credits::where([['user_id', auth()->user()->id], ['status', 1]])->get();
                 $amountTotal = LoanPayment::select(DB::raw('COUNT(amount) AS total'))->where([['user_id', auth()->user()->id], ['date', "$fecha"]])->get();
@@ -48,7 +54,7 @@ class homeController extends Controller
                 $pendiente = $creditTotal[0]->total - $countTotal[0]->total;
             }
             return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente'));
-        } catch (Exception $e) {
+        } catch (Exception $e) {          
             $fail = "Error al cargar la Infomacion";
             return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente', 'fail'));
         }

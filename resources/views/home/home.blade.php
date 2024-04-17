@@ -5,21 +5,21 @@
 <?php date_default_timezone_set('America/Bogota'); ?>
 @section('content')
     <div class="card shadow mb-4">
+        @isset($fail)
+            <tr>
+                <div class="card mb-4 py-3 border-bottom-danger">
+                    <div class="card-body">
+                        {{ $fail }}
+                    </div>
+                </div>
+
+            </tr>
+        @endisset
 
 
         <div class="p-2">
             @if (auth()->user()->type == 'admin')
                 <div class="row">
-                    @isset($fail)
-                        <tr>
-                            <div class="card mb-4 py-3 border-bottom-danger">
-                                <div class="card-body">
-                                    {{ $fail }}
-                                </div>
-                            </div>
-
-                        </tr>
-                    @endisset
 
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -110,16 +110,7 @@
                 </div>
             @else
                 <div class="row">
-                    @isset($fail)
-                        <tr>
-                            <div class="card mb-4 py-3 border-bottom-danger">
-                                <div class="card-body">
-                                    {{ $fail }}
-                                </div>
-                            </div>
-
-                        </tr>
-                    @endisset
+                    
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
