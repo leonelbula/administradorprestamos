@@ -107,10 +107,42 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Cobros Pendientes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($fail)
+                                        <tr>
+                                            <div class="card mb-4 py-3 border-bottom-danger">
+                                                <div class="card-body">
+                                                    {{ $fail }}
+                                                </div>
+                                            </div>
+
+                                        </tr>
+                                    @endisset
+                                    @foreach ($cobrospendienteusuario as $cobros)
+                                        <tr>
+                                            <td>{{ $cobros->user->name }}</td>
+                                            <td>{{ $cobros->total }}</td>
+
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             @else
                 <div class="row">
-                    
+
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
