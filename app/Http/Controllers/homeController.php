@@ -6,6 +6,7 @@ use App\Models\AmountUser;
 use App\Models\Credits;
 use App\Models\Customer;
 use App\Models\LoanPayment;
+use App\Models\PaymentAsig;
 use App\Models\PaymentsDay;
 use Exception;
 use Illuminate\Http\Request;
@@ -27,36 +28,37 @@ class homeController extends Controller
         $amountTotal = [];
         $pendiente = [];
         $cobrospendienteusuario = [];
-        if (auth()->user()->type == 'admin') {
-            $fecha = Date('Y-m-d');
-            $customers = Customer::all();
-            $credit = Credits::select(DB::raw('SUM(amount) AS total'))->where('status', 1)->get();
-            $amountTotal = LoanPayment::select(DB::raw('SUM(amount) AS total'))->where('date', "$fecha")->get();
-            $countTotal = LoanPayment::select(DB::raw('COUNT(amount) AS total'))->where('date', "$fecha")->get();
-            $creditTotal = Credits::select(DB::raw('COUNT(id) AS total'))->where('status', 1)->get();
-            $pendiente = $creditTotal[0]->total - $countTotal[0]->total;
-            $cobrospendienteusuario =  PaymentsDay::select('user_id', DB::raw('count(*) as total'))->groupBy('user_id')->where('date',"$fecha")->get();
-            //echo $cobrospendienteusuario;
-            //die();
-        } else {
-            $user_id = auth()->user()->id;
-            $amountUser = AmountUser::where([['user_id', auth()->user()->id], ['state', 1]])->first();
-
-            if ($amountUser) {
-                echo  $fecha = $amountUser->date;
-            } else {
-                $fecha = Date('Y-m-d');
-            }
-
-            $customers = PaymentsDay::where('user_id', auth()->user()->id)->get();
-            $credit = Credits::where([['user_id', auth()->user()->id], ['status', 1]])->get();
-            $amountTotal = LoanPayment::select(DB::raw('COUNT(amount) AS total'))->where([['user_id', auth()->user()->id], ['date', "$fecha"]])->get();
-            $countTotal = LoanPayment::select(DB::raw('COUNT(amount) AS total'))->where([['user_id', auth()->user()->id], ['date', "$fecha"]])->get();
-            $creditTotal = Credits::select(DB::raw('COUNT(id) AS total'))->where([['user_id', auth()->user()->id], ['status', 1]])->get();
-            $pendiente = $creditTotal[0]->total - $countTotal[0]->total;
-        }
-        return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente', 'cobrospendienteusuario'));
         try {
+            if (auth()->user()->type == 'admin') {
+                $fecha = Date('Y-m-d');
+                $customers = Customer::select(DB::raw('COUNT(id) AS total'))->get();
+                $credit = Credits::select(DB::raw('SUM(balance) AS total'))->where('status', 1)->get();
+                $amountTotal = LoanPayment::select(DB::raw('SUM(amount) AS total'))->where('date', "$fecha")->get();
+                $countTotal = LoanPayment::select(DB::raw('count(id) AS total'))->where('date', "$fecha")->get();
+                $creditTotal = Credits::select(DB::raw('COUNT(id) AS total'))->where('status', 1)->get();
+                $pendiente = $creditTotal[0]->total - $countTotal[0]->total;
+                $cobrospendienteusuario =  PaymentAsig::all();
+                //echo $creditTotal;
+                //die();
+            } else {
+                $user_id = auth()->user()->id;
+                $amountUser = AmountUser::where([['user_id', auth()->user()->id], ['state', 1]])->first();
+
+                if ($amountUser) {
+                    $fecha = $amountUser->date;
+                } else {
+                    $fecha = Date('Y-m-d');
+                }
+
+                $customers =  Customer::select(DB::raw('COUNT(id) AS total'))->where('user_id', auth()->user()->id)->get();
+                $credit = Credits::select(DB::raw('SUM(balance) AS total'))->where([['user_id', auth()->user()->id], ['status', 1]])->get();
+                $amountTotal = LoanPayment::select(DB::raw('COUNT(amount) AS total'))->where([['user_id', auth()->user()->id], ['date', "$fecha"]])->get();
+                $countTotal = LoanPayment::select(DB::raw('COUNT(amount) AS total'))->where([['user_id', auth()->user()->id], ['date', "$fecha"]])->get();
+                $creditTotal = Credits::select(DB::raw('COUNT(id) AS total'))->where([['user_id', auth()->user()->id], ['status', 1]])->get();
+
+                $pendiente = $creditTotal[0]->total - $countTotal[0]->total;
+            }
+            return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente', 'cobrospendienteusuario'));
         } catch (Exception $e) {
             $fail = "Error al cargar la Infomacion";
             return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente', 'cobrospendienteusuario', 'fail'));

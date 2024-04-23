@@ -8,6 +8,7 @@ use App\Models\ClosingDay;
 use App\Models\Credits;
 use App\Models\LoanPayment;
 use App\Models\NewCreditdUser;
+use App\Models\PaymentAsig;
 use App\Models\PaymentsDay;
 use Exception;
 use Illuminate\Http\Request;
@@ -114,6 +115,11 @@ class AmountUserController extends Controller
             } else {
                 $details = $request->details;
             }
+
+            $reinPayAsig  = PaymentAsig::where('user_id', $amountuser->user_id)->get();
+            $reinPayAsig[0]->pendit = $reinPayAsig[0]->asig;
+            $reinPayAsig[0]->save();
+            
 
             $newCreditValue = NewCreditdUser::where('user_id', $amountuser->user_id)
                 ->whereBetween('date', [$amountuser->date, $amountuser->date])

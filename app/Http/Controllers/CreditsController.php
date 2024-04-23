@@ -6,13 +6,14 @@ use App\Models\AssignPayment;
 use App\Models\Credits;
 use App\Models\Customer;
 use App\Models\NewCreditdUser;
+use App\Models\PaymentAsig;
 use App\Models\User;
 use Barryvdh\DomPDF\PDF;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\Echo_;
+
 
 class CreditsController extends Controller
 {
@@ -71,6 +72,24 @@ class CreditsController extends Controller
             } else {
                 $user_id = auth()->user()->id;
             }
+            $asigUser = PaymentAsig::where('user_id', auth()->user()->id)->get();
+
+            if (empty($asigUser[0])) {
+                $asig = new PaymentAsig();
+                $asig->asig = 1;
+                $asig->pendit = 1;
+                $asig->user_id = auth()->user()->id;
+                $asig->save();
+            } else {
+
+                $val = $asigUser[0]->asig;
+                $valP = $asigUser[0]->pendit;
+                $nuevo = $val + 1;
+                $nuevoP = $valP + 1;
+                $asigUser[0]->asig = $nuevo;
+                $asigUser[0]->pendit = $nuevoP;
+                $asigUser[0]->save();
+            }
 
             $amount = str_replace('.', '', $request->amount);
             $quota = $request->total / $request->quota_number;
@@ -105,6 +124,7 @@ class CreditsController extends Controller
 
             return redirect()->route('credit.index')->with('success', 'Credito registrados corectamente');
         } catch (Exception $e) {
+
             return redirect()->route('credit.index')->with('fail', 'Credito No registrado');
         }
     }

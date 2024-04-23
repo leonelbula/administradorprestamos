@@ -7,6 +7,7 @@ use App\Models\AssignPayment;
 use App\Models\Credits;
 use App\Models\Customer;
 use App\Models\LoanPayment;
+use App\Models\PaymentAsig;
 use App\Models\PaymentsDay;
 use App\Models\User;
 use Exception;
@@ -54,61 +55,65 @@ class LoanPaymentController extends Controller
     }
     public function save(Request $request)
     {
-        // try {
-
-        $credit = Credits::find($request->creditid);
-        $detallesCredit = Credits::where('id', $request->creditid)->get();
-
-        $total =  $detallesCredit[0]->amount +  $detallesCredit[0]->utility;
-
-        if ($request->amount > $detallesCredit[0]->balance) {
-            return redirect()->route('loanpayment.create')->with('info', 'El valor ingresado supero el saldo pendiente');
-        }
-
-        $numCoutaPay = intval($request->amount / $detallesCredit[0]->quota);
-        $balanceNew = $detallesCredit[0]->balance - $request->amount;
-        $newLoan = $detallesCredit[0]->quota_number_pendieng - $numCoutaPay;
-
-        $credit->id = $request->creditid;
-        $credit->quota_number_pendieng = $newLoan;
-        $credit->balance = $balanceNew;
-
-        $loanpayment = LoanPayment::where([['customer_id', $request->id], ['date', $request->date]])->get();
-
-        if (isset($loanpayment[0]->id)) {
-            $amount = $loanpayment[0]->amount + $request->amount;
-            $loanpaymentnew = LoanPayment::find($loanpayment[0]->id);
-
-            $loanpaymentnew->amount = $amount;
-
-            $resul = $loanpaymentnew->save();
-            if ($resul) {
-                $credit->save();
-            }
-
-            return redirect()->route('loanpayment.create')->with('success', 'Cobro registrados corectamente');
-        } else {
-
-            $paymentDay = PaymentsDay::where('customer_id', $detallesCredit[0]->customer_id)->get();
-            if (isset($paymentDay[0]->id)) {
-                $paymentDay[0]->delete();
-            }
-
-            $loanPay = new  LoanPayment();
-            $loanPay->amount = $request->amount;
-            $loanPay->date = $request->date;
-            $loanPay->user_id = auth()->user()->id;
-            $loanPay->customer_id = $request->id;
-            $loanPay->credit_id = $request->creditid;
-
-            $resul = $loanPay->save();
-            if ($resul) {
-                $credit->save();
-            }
-
-            return redirect()->route('loanpayment.create')->with('success', 'Cobro registrados corectamente');
-        }
         try {
+
+            $credit = Credits::find($request->creditid);
+            $detallesCredit = Credits::where('id', $request->creditid)->get();
+
+            $total =  $detallesCredit[0]->amount +  $detallesCredit[0]->utility;
+
+            if ($request->amount > $detallesCredit[0]->balance) {
+                return redirect()->route('loanpayment.create')->with('info', 'El valor ingresado supero el saldo pendiente');
+            }
+
+            $numCoutaPay = intval($request->amount / $detallesCredit[0]->quota);
+            $balanceNew = $detallesCredit[0]->balance - $request->amount;
+            $newLoan = $detallesCredit[0]->quota_number_pendieng - $numCoutaPay;
+
+            $credit->id = $request->creditid;
+            $credit->quota_number_pendieng = $newLoan;
+            $credit->balance = $balanceNew;
+            //verificar que si no tiene valor ya registrado
+            $loanpayment = LoanPayment::where([['customer_id', $request->id], ['date', $request->date]])->get();
+
+            if (isset($loanpayment[0]->id)) {
+                $amount = $loanpayment[0]->amount + $request->amount;
+                $loanpaymentnew = LoanPayment::find($loanpayment[0]->id);
+
+                $loanpaymentnew->amount = $amount;
+
+                $resul = $loanpaymentnew->save();
+                if ($resul) {
+                    $credit->save();
+                }
+
+                return redirect()->route('loanpayment.create')->with('success', 'Cobro registrados corectamente');
+            } else {
+
+                $paymentDay = PaymentsDay::where('customer_id', $detallesCredit[0]->customer_id)->get();
+                if (isset($paymentDay[0]->id)) {
+                    $paymentDay[0]->delete();
+                }
+
+                $asigUser = PaymentAsig::where('user_id', auth()->user()->id)->get();
+                $pend = $asigUser[0]->pendit - 1;
+                $asigUser[0]->pendit = $pend;
+                $asigUser[0]->save();
+
+                $loanPay = new  LoanPayment();
+                $loanPay->amount = $request->amount;
+                $loanPay->date = $request->date;
+                $loanPay->user_id = auth()->user()->id;
+                $loanPay->customer_id = $request->id;
+                $loanPay->credit_id = $request->creditid;
+
+                $resul = $loanPay->save();
+                if ($resul) {
+                    $credit->save();
+                }
+
+                return redirect()->route('loanpayment.create')->with('success', 'Cobro registrados corectamente');
+            }
         } catch (Exception $e) {
 
             return redirect()->route('loanpayment.create')->with('fail', 'Cobro no registrados');
@@ -137,7 +142,7 @@ class LoanPaymentController extends Controller
         $customers = [];
         try {
             if (auth()->user()->type === 'admin') {
-            $customers = PaymentsDay::select('customer_id', DB::raw('count(*) as total'))->groupBy('customer_id')->get();
+                $customers = PaymentsDay::select('customer_id', DB::raw('count(*) as total'))->groupBy('customer_id')->get();
                 return view('loanpayment.pendienghistoty', compact('title', 'customers'));
             }
             $customers = PaymentsDay::select('customer_id', DB::raw('count(*) as total'))->groupBy('customer_id')->where('user_id', auth()->user()->id)->get();

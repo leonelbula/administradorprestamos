@@ -31,7 +31,7 @@
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="">Valor a Entregar</label>
                                     <input type="number" class="form-control " name="amount" id="amount"
-                                        value="{{ $amountuser->amount - $newCredit }}" placeholder="Valor entregado"
+                                        value="{{ $newCredit - $amountuser->amount  }}" placeholder="Valor entregado"
                                         disabled>
                                 </div>
                                 <div class="col-sm-6">

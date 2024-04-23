@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Credits;
 use App\Models\Customer;
+use App\Models\PaymentAsig;
 use Illuminate\Http\Request;
 
 class CapitalBalanceController extends Controller
@@ -29,6 +30,25 @@ class CapitalBalanceController extends Controller
             'interest' => 'required',
             'date' => 'required',
         ]);
+
+        $asigUser = PaymentAsig::where('user_id', auth()->user()->id)->get();
+
+        if (empty($asigUser[0])) {
+            $asig = new PaymentAsig();
+            $asig->asig = 1;
+            $asig->pendit = 1;
+            $asig->user_id = auth()->user()->id;
+            $asig->save();
+        } else {
+
+            $val = $asigUser[0]->asig;
+            $valP = $asigUser[0]->pendit;
+            $nuevo = $val + 1;
+            $nuevoP = $valP + 1;
+            $asigUser[0]->asig = $nuevo;
+            $asigUser[0]->pendit = $nuevoP;
+            $asigUser[0]->save();
+        }
 
         $customer = Customer::find($request->id);
 

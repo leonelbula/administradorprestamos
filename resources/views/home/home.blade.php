@@ -2,7 +2,6 @@
 @section('title')
     {{ $title }} <span> {{ date('Y-m-d') }}</span>
 @endsection
-<?php date_default_timezone_set('America/Bogota'); ?>
 @section('content')
     <div class="card shadow mb-4">
         @isset($fail)
@@ -29,7 +28,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             Total Clientes</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count($customers) }}</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($customers[0]->total, 0, '', '.') }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -90,8 +89,8 @@
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <a href="{{ route('loanpayment.pendieg') }}">
+                                <a href="{{ route('loanpayment.pendieg') }}">
+                                    <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Recaudos pendientes</div>
@@ -99,11 +98,11 @@
                                                 {{ number_format($pendiente, 0, '', '.') }}
                                             </div>
                                         </div>
-                                    </a>
-                                    <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -113,6 +112,7 @@
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
+                                        <th>Cobros Realizados</th>
                                         <th>Cobros Pendientes</th>
                                     </tr>
                                 </thead>
@@ -130,7 +130,8 @@
                                     @foreach ($cobrospendienteusuario as $cobros)
                                         <tr>
                                             <td>{{ $cobros->user->name }}</td>
-                                            <td>{{ $cobros->total }}</td>
+                                            <td>{{ $cobros->asig -  $cobros->pendit}}</td>
+                                            <td>{{ $cobros->pendit }}</td>
 
                                         </tr>
                                     @endforeach
@@ -151,7 +152,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             Total Clientes</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count($customers) }}</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($customers[0]->total, 0, '', '.') }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -168,7 +169,7 @@
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                             Total prestamos</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            {{ count($credit) }}
+                                            {{ number_format($credit[0]->total, 0, '', '.') }}
                                         </div>
                                     </div>
                                     <div class="col-auto">
