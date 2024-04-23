@@ -28,7 +28,8 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             Total Clientes</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($customers[0]->total, 0, '', '.') }}</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{ number_format($customers[0]->total, 0, '', '.') }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -130,8 +131,45 @@
                                     @foreach ($cobrospendienteusuario as $cobros)
                                         <tr>
                                             <td>{{ $cobros->user->name }}</td>
-                                            <td>{{ $cobros->asig -  $cobros->pendit}}</td>
+                                            <td>{{ $cobros->asig - $cobros->pendit }}</td>
                                             <td>{{ $cobros->pendit }}</td>
+
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="card-body">
+                        <hr>
+                        <h3>Recaudo por cobrador</h3>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="cobroTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Valor recaudado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($fail)
+                                        <tr>
+                                            <div class="card mb-4 py-3 border-bottom-danger">
+                                                <div class="card-body">
+                                                    {{ $fail }}
+                                                </div>
+                                            </div>
+
+                                        </tr>
+                                    @endisset
+                                    @foreach ($PaymentTotalUser as $cobros)
+                                        <tr>
+                                            <td>{{ $cobros->user->name }}</td>
+                                            <td>{{ $cobros->total }}</td>
 
                                         </tr>
                                     @endforeach
@@ -152,7 +190,8 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             Total Clientes</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($customers[0]->total, 0, '', '.') }}</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            {{ number_format($customers[0]->total, 0, '', '.') }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-calendar fa-2x text-gray-300"></i>

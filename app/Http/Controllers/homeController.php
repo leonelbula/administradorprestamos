@@ -27,6 +27,7 @@ class homeController extends Controller
         $credit = [];
         $amountTotal = [];
         $pendiente = [];
+        $PaymentTotalUser = [];
         $cobrospendienteusuario = [];
         try {
             if (auth()->user()->type == 'admin') {
@@ -35,6 +36,7 @@ class homeController extends Controller
                 $credit = Credits::select(DB::raw('SUM(balance) AS total'))->where('status', 1)->get();
                 $amountTotal = LoanPayment::select(DB::raw('SUM(amount) AS total'))->where('date', "$fecha")->get();
                 $countTotal = LoanPayment::select(DB::raw('count(id) AS total'))->where('date', "$fecha")->get();
+                $PaymentTotalUser = LoanPayment::select(DB::raw('sum(amount) AS total'), 'user_id')->where('date', "$fecha")->groupBy('user_id')->get();
                 $creditTotal = Credits::select(DB::raw('COUNT(id) AS total'))->where('status', 1)->get();
                 $pendiente = $creditTotal[0]->total - $countTotal[0]->total;
                 $cobrospendienteusuario =  PaymentAsig::all();
@@ -58,10 +60,10 @@ class homeController extends Controller
 
                 $pendiente = $creditTotal[0]->total - $countTotal[0]->total;
             }
-            return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente', 'cobrospendienteusuario'));
+            return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente', 'cobrospendienteusuario', 'PaymentTotalUser'));
         } catch (Exception $e) {
             $fail = "Error al cargar la Infomacion";
-            return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente', 'cobrospendienteusuario', 'fail'));
+            return view('home.home', compact('title', 'customers', 'credit', 'amountTotal', 'pendiente', 'cobrospendienteusuario', 'PaymentTotalUser', 'fail'));
         }
     }
 }
